@@ -1,8 +1,8 @@
-// ---------- Particle Background ----------
+// -------- Particle Background --------
 const bgCanvas = document.getElementById('bg');
 const ctx = bgCanvas.getContext('2d');
 
-function resize() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
+function resize(){ bgCanvas.width=window.innerWidth; bgCanvas.height=window.innerHeight; }
 window.addEventListener('resize', resize); resize();
 
 let numParticles = 80;
@@ -10,10 +10,15 @@ let particles = [];
 let bgColor = {r:0,g:0,b:0};
 let particleColor = {r:127,g:255,b:212};
 
-function createParticles() {
-  particles = [];
+function createParticles(){
+  particles=[];
   for(let i=0;i<numParticles;i++){
-    particles.push({x:Math.random()*bgCanvas.width, y:Math.random()*bgCanvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5});
+    particles.push({
+      x:Math.random()*bgCanvas.width,
+      y:Math.random()*bgCanvas.height,
+      vx:(Math.random()-0.5)*0.5,
+      vy:(Math.random()-0.5)*0.5
+    });
   }
 }
 createParticles();
@@ -39,7 +44,7 @@ function drawParticles(){
 
   for(let i=0;i<particles.length;i++){
     for(let j=i+1;j<particles.length;j++){
-      const a=particles[i], b=particles[j];
+      const a=particles[i],b=particles[j];
       const dx=a.x-b.x, dy=a.y-b.y;
       const dist=Math.sqrt(dx*dx+dy*dy);
       if(dist<120){
@@ -54,14 +59,10 @@ function drawParticles(){
   }
 }
 
-function animate(){
-  updateParticles();
-  drawParticles();
-  requestAnimationFrame(animate);
-}
+function animate(){ updateParticles(); drawParticles(); requestAnimationFrame(animate); }
 animate();
 
-// ---------- Settings ----------
+// -------- Settings --------
 const settingsButton = document.getElementById('settingsButton');
 const settingsMenu = document.getElementById('settingsMenu');
 settingsButton.addEventListener('click', ()=>settingsMenu.classList.toggle('open'));
@@ -82,11 +83,11 @@ document.getElementById('particleCount').addEventListener('input', e=>{
   createParticles();
 });
 
-// ---------- Games Section ----------
+// -------- Games Section --------
 const games = [
-  {name:"Game 1", file:"games/game1.html", img:"games/game1.png"},
-  {name:"Game 2", file:"games/game2.html", img:"games/game2.png"},
-  {name:"Game 3", file:"games/game3.html", img:"games/game3.png"}
+  {name:"Game 1", file:"games/game1/index.html", img:"games/game1/game1.png"},
+  {name:"Game 2", file:"games/game2/index.html", img:"games/game2/game2.png"},
+  {name:"Game 3", file:"games/game3/index.html", img:"games/game3/game3.png"}
 ];
 
 const gamesSection = document.getElementById('gamesSection');
