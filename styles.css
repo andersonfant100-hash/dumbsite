@@ -1,26 +1,23 @@
 body {
   margin:0;
-  overflow:hidden;
+  overflow-x:hidden;
   background:#000;
   font-family: 'Cinzel', serif;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
   color:#e9fef6;
 }
 
 h1 {
   font-size: clamp(3rem, 8vw, 7rem);
-  text-transform: uppercase;
-  z-index:2;
   text-align:center;
+  text-transform: uppercase;
+  margin-top:20px;
+  z-index:2;
+  position:relative;
   user-select:none;
 }
 
 canvas {
-  position: fixed;
+  position:fixed;
   top:0;
   left:0;
   width:100%;
@@ -44,20 +41,52 @@ canvas {
   z-index:3;
   overflow-y:auto;
 }
-
 #settingsMenu.open { right:0; }
 
 #settingsButton {
-  position: fixed;
+  position:fixed;
   top:20px;
   right:20px;
   z-index:4;
   padding:10px 15px;
-  background: #1e1e1e;
+  background:#1e1e1e;
   border:1px solid #e9fef6;
   cursor:pointer;
 }
 
-#settingsMenu h2 { margin-top:0; font-size:1.5rem; }
-#settingsMenu label { display:block; margin:10px 0 5px; }
-#settingsMenu input[type="range"] { width:100%; }
+/* Games Section */
+#gamesSection {
+  margin-top:50px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+  padding:20px;
+  position:relative;
+  z-index:2;
+}
+
+.game-card {
+  width:150px;
+  height:150px;
+  background:#111;
+  border:1px solid #e9fef6;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform 0.2s;
+  color:#fff;
+  text-align:center;
+}
+
+.game-card img {
+  max-width:100px;
+  max-height:100px;
+  margin-bottom:5px;
+}
+
+.game-card:hover {
+  transform: scale(1.1);
+}
