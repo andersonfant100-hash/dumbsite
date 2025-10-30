@@ -1,94 +1,99 @@
-// ---------- Background particle network ----------
+// ---------- Particle Background ----------
 const bgCanvas = document.getElementById('bg');
-const bgCtx = bgCanvas.getContext('2d');
+const ctx = bgCanvas.getContext('2d');
 
-function resizeBg() {
-  bgCanvas.width = window.innerWidth;
-  bgCanvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeBg);
-resizeBg();
+function resize() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resize); resize();
 
 let numParticles = 80;
 let particles = [];
-let bgColor = { r:0, g:0, b:0 };
-let particleColor = { r:127, g:255, b:212 };
+let bgColor = {r:0,g:0,b:0};
+let particleColor = {r:127,g:255,b:212};
 
 function createParticles() {
   particles = [];
-  for (let i = 0; i < numParticles; i++) {
-    particles.push({
-      x: Math.random()*bgCanvas.width,
-      y: Math.random()*bgCanvas.height,
-      vx: (Math.random()-0.5)*0.5,
-      vy: (Math.random()-0.5)*0.5
-    });
+  for(let i=0;i<numParticles;i++){
+    particles.push({x:Math.random()*bgCanvas.width, y:Math.random()*bgCanvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5});
   }
 }
 createParticles();
 
-function updateParticles() {
+function updateParticles(){
   for(const p of particles){
-    p.x += p.vx;
-    p.y += p.vy;
-    if(p.x < 0 || p.x > bgCanvas.width) p.vx *= -1;
-    if(p.y < 0 || p.y > bgCanvas.height) p.vy *= -1;
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>bgCanvas.width)p.vx*=-1;
+    if(p.y<0||p.y>bgCanvas.height)p.vy*=-1;
   }
 }
 
-function drawParticles() {
-  bgCtx.fillStyle = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
-  bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
+function drawParticles(){
+  ctx.fillStyle=`rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
+  ctx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
 
   for(const p of particles){
-    bgCtx.beginPath();
-    bgCtx.arc(p.x,p.y,2,0,Math.PI*2);
-    bgCtx.fillStyle = `rgb(${particleColor.r},${particleColor.g},${particleColor.b})`;
-    bgCtx.fill();
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,2,0,Math.PI*2);
+    ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`;
+    ctx.fill();
   }
 
-  // Lines
   for(let i=0;i<particles.length;i++){
     for(let j=i+1;j<particles.length;j++){
-      const a = particles[i], b = particles[j];
-      const dx = a.x-b.x, dy = a.y-b.y;
-      const dist = Math.sqrt(dx*dx+dy*dy);
-      if(dist < 120){
-        bgCtx.strokeStyle = `rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-dist/120})`;
-        bgCtx.lineWidth = 0.5;
-        bgCtx.beginPath();
-        bgCtx.moveTo(a.x,a.y);
-        bgCtx.lineTo(b.x,b.y);
-        bgCtx.stroke();
+      const a=particles[i], b=particles[j];
+      const dx=a.x-b.x, dy=a.y-b.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<120){
+        ctx.strokeStyle=`rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-dist/120})`;
+        ctx.lineWidth=0.5;
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.stroke();
       }
     }
   }
 }
 
-function animateBg() {
+function animate(){
   updateParticles();
   drawParticles();
-  requestAnimationFrame(animateBg);
+  requestAnimationFrame(animate);
 }
-animateBg();
+animate();
 
-// ---------- Settings menu ----------
+// ---------- Settings ----------
 const settingsButton = document.getElementById('settingsButton');
 const settingsMenu = document.getElementById('settingsMenu');
-settingsButton.addEventListener('click', ()=> settingsMenu.classList.toggle('open'));
+settingsButton.addEventListener('click', ()=>settingsMenu.classList.toggle('open'));
 
-// Background RGB sliders
-document.getElementById('bgR').addEventListener('input', e => bgColor.r = e.target.value);
-document.getElementById('bgG').addEventListener('input', e => bgColor.g = e.target.value);
-document.getElementById('bgB').addEventListener('input', e => bgColor.b = e.target.value);
+// Background sliders
+document.getElementById('bgR').addEventListener('input', e=>bgColor.r=e.target.value);
+document.getElementById('bgG').addEventListener('input', e=>bgColor.g=e.target.value);
+document.getElementById('bgB').addEventListener('input', e=>bgColor.b=e.target.value);
 
-// Particle RGB sliders
-document.getElementById('pR').addEventListener('input', e => particleColor.r = e.target.value);
-document.getElementById('pG').addEventListener('input', e => particleColor.g = e.target.value);
-document.getElementById('pB').addEventListener('input', e => particleColor.b = e.target.value);
+// Particle sliders
+document.getElementById('pR').addEventListener('input', e=>particleColor.r=e.target.value);
+document.getElementById('pG').addEventListener('input', e=>particleColor.g=e.target.value);
+document.getElementById('pB').addEventListener('input', e=>particleColor.b=e.target.value);
 
 // Particle count
 document.getElementById('particleCount').addEventListener('input', e=>{
-  numParticles = parseInt(e.target.value);
+  numParticles=parseInt(e.target.value);
   createParticles();
+});
+
+// ---------- Games Section ----------
+const games = [
+  {name:"Game 1", file:"games/game1.html", img:"games/game1.png"},
+  {name:"Game 2", file:"games/game2.html", img:"games/game2.png"},
+  {name:"Game 3", file:"games/game3.html", img:"games/game3.png"}
+];
+
+const gamesSection = document.getElementById('gamesSection');
+games.forEach(g=>{
+  const card = document.createElement('div');
+  card.className='game-card';
+  card.innerHTML=`<img src="${g.img}" alt="${g.name}"><div>${g.name}</div>`;
+  card.onclick = ()=>window.location.href=g.file;
+  gamesSection.appendChild(card);
 });
