@@ -11,8 +11,8 @@ h1 {
   text-align:center;
   text-transform: uppercase;
   margin-top:20px;
-  z-index:2;
   position:relative;
+  z-index:2;
   user-select:none;
 }
 
