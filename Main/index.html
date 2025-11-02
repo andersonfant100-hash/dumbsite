@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shaptz Grave</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Shaptz Grave</h1>
+<canvas id="bg"></canvas>
+
+<div id="settingsButton">⚙ Settings</div>
+
+<div id="settingsMenu">
+  <h2>Settings</h2>
+
+  <h3>Background Color</h3>
+  <label>R: <input type="range" id="bgR" min="0" max="255" value="0"></label>
+  <label>G: <input type="range" id="bgG" min="0" max="255" value="0"></label>
+  <label>B: <input type="range" id="bgB" min="0" max="255" value="0"></label>
+
+  <h3>Particle Color</h3>
+  <label>R: <input type="range" id="pR" min="0" max="255" value="127"></label>
+  <label>G: <input type="range" id="pG" min="0" max="255" value="255"></label>
+  <label>B: <input type="range" id="pB" min="0" max="255" value="212"></label>
+
+  <h3>Particles</h3>
+  <label>Count: <input type="range" id="particleCount" min="10" max="1000" value="80"></label>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
