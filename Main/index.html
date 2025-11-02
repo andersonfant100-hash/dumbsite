@@ -8,7 +8,7 @@
 </head>
 <body>
 <div id="app">
-  <!-- Sidebar: Servers -->
+  <!-- Sidebar -->
   <div id="sidebar">
     <div id="server-list"></div>
     <div id="user-info">
@@ -19,7 +19,7 @@
 
   <!-- Main chat -->
   <div id="main">
-    <!-- Channel list -->
+    <!-- Channels -->
     <ul id="channel-list"></ul>
 
     <!-- Messages -->
@@ -33,6 +33,10 @@
   </div>
 </div>
 
-<script src="app.js" type="module"></script>
+<!-- Supabase JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+
+<!-- App JS -->
+<script type="module" src="app.js"></script>
 </body>
 </html>
