@@ -1,16 +1,16 @@
 /* Reset */
-* { margin:0; padding:0; box-sizing:border-box; font-family: "Segoe UI", sans-serif; }
+* { margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI",sans-serif; }
 
-/* App Layout */
-#app { display: flex; height: 100vh; background: #36393f; color: #fff; }
+/* Layout */
+#app { display:flex; height:100vh; background:#36393f; color:#fff; }
 
 /* Sidebar */
-#sidebar { width: 80px; background: #2f3136; display:flex; flex-direction:column; justify-content:space-between; padding:10px 0; }
-#server-list div { width: 50px; height: 50px; margin: 0 auto 10px auto; border-radius: 50%; background:#7289da; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:bold; font-size:20px; }
+#sidebar { width:80px; background:#2f3136; display:flex; flex-direction:column; justify-content:space-between; padding:10px 0; }
+#server-list div { width:50px; height:50px; margin:0 auto 10px auto; border-radius:50%; background:#7289da; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:bold; font-size:20px; }
 #user-info { text-align:center; margin-bottom:10px; }
 #user-info img { width:40px; height:40px; border-radius:50%; margin-bottom:5px; }
 
-/* Main Chat */
+/* Main chat */
 #main { flex:1; display:flex; flex-direction:column; }
 
 /* Channels */
@@ -21,9 +21,10 @@
 /* Messages */
 #messages-container { flex:1; display:flex; flex-direction:column; }
 #messages { flex:1; padding:10px; overflow-y:auto; }
-.message { margin-bottom:10px; }
-.message .username { font-weight:bold; margin-right:5px; }
-.message .avatar { width:30px; height:30px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+.message { margin-bottom:10px; display:flex; align-items:flex-start; }
+.message .avatar { width:30px; height:30px; border-radius:50%; margin-right:10px; }
+.message .content { display:flex; flex-direction:column; }
+.message .username { font-weight:bold; margin-bottom:2px; }
 
 /* Send box */
 #send-message { display:flex; padding:10px; background:#40444b; }
