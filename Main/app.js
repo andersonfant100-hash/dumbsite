@@ -24,7 +24,7 @@ async function loadUser() {
   if (!profile) return;
   userData = profile;
   document.getElementById('user-name').textContent = profile.username;
-  document.getElementById('user-avatar').src = profile.avatar_url || 'https://via.placeholder.com/40';
+  document.getElementById('user-avatar').src = profile.avatar_url || 'images/default-avatar.png';
 }
 
 // ------------------------
@@ -74,7 +74,7 @@ async function loadMessages(channelId) {
   const messagesDiv = document.getElementById('messages');
   messagesDiv.innerHTML = messages.map(m => `
     <div class="message">
-      <img class="avatar" src="${m.profiles?.avatar_url || 'https://via.placeholder.com/30'}" />
+      <img class="avatar" src="${m.profiles?.avatar_url || 'images/default-avatar.png'}" />
       <div class="content">
         <span class="username">${m.profiles?.username || 'Unknown'}</span>
         <span>${m.content}</span>
@@ -88,7 +88,7 @@ async function loadMessages(channelId) {
       const m = payload.new;
       messagesDiv.innerHTML += `
         <div class="message">
-          <img class="avatar" src="${userData.avatar_url || 'https://via.placeholder.com/30'}" />
+          <img class="avatar" src="${userData.avatar_url || 'images/default-avatar.png'}" />
           <div class="content">
             <span class="username">${userData.username}</span>
             <span>${m.content}</span>
@@ -118,3 +118,4 @@ document.getElementById('send-btn').addEventListener('click', async () => {
 // ------------------------
 loadUser();
 loadServers();
+
