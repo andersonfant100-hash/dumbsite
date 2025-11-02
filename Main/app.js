@@ -1,34 +1,29 @@
-import { createClient } from '@supabase/supabase-js'
-
 // ------------------------
 // Supabase setup
 // ------------------------
-const supabase = createClient(
-  'https://dwpxtoojztqhhhohwxwc.supabase.co', // Your project URL
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3cHh0b29qenRxaGhob2h3eHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMjU1MDUsImV4cCI6MjA3NzYwMTUwNX0.XsKi3yPO0dewL3_eUTPqZAMD8BtAwGXHGrmiX81Q_KI' // Your anon public key
-)
+const SUPABASE_URL = "https://dwpxtoojztqhhhohwxwc.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3cHh0b29qenRxaGhob2h3eHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMjU1MDUsImV4cCI6MjA3NzYwMTUwNX0.XsKi3yPO0dewL3_eUTPqZAMD8BtAwGXHGrmiX81Q_KI"
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 let currentChannelId = null
 let userId = null
 let userData = {}
 
 // ------------------------
-// Get current user
+// Load user profile
 // ------------------------
-async function getCurrentUser() {
+async function loadUser() {
   const { data: { user } } = await supabase.auth.getUser()
-  userId = user?.id
-  if (!userId) console.warn('User not logged in yet!')
-  else loadUserProfile()
-}
+  if (!user) return console.warn('User not logged in!')
+  userId = user.id
 
-// Load user profile (avatar + username)
-async function loadUserProfile() {
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', userId)
     .single()
+
   if (!profile) return
   userData = profile
   document.getElementById('user-name').textContent = profile.username
@@ -83,8 +78,10 @@ async function loadMessages(channelId) {
   messagesDiv.innerHTML = messages.map(m => `
     <div class="message">
       <img class="avatar" src="${m.profiles?.avatar_url || 'https://via.placeholder.com/30'}" />
-      <span class="username">${m.profiles?.username || 'Unknown'}</span>
-      <span class="content">${m.content}</span>
+      <div class="content">
+        <span class="username">${m.profiles?.username || 'Unknown'}</span>
+        <span>${m.content}</span>
+      </div>
     </div>
   `).join('')
 
@@ -96,8 +93,10 @@ async function loadMessages(channelId) {
       messagesDiv.innerHTML += `
         <div class="message">
           <img class="avatar" src="${userData.avatar_url || 'https://via.placeholder.com/30'}" />
-          <span class="username">${userData.username}</span>
-          <span class="content">${m.content}</span>
+          <div class="content">
+            <span class="username">${userData.username}</span>
+            <span>${m.content}</span>
+          </div>
         </div>
       `
     })
@@ -105,7 +104,7 @@ async function loadMessages(channelId) {
 }
 
 // ------------------------
-// Send a message
+// Send message
 // ------------------------
 document.getElementById('send-btn').addEventListener('click', async () => {
   const input = document.getElementById('message-input')
@@ -121,5 +120,5 @@ document.getElementById('send-btn').addEventListener('click', async () => {
 // ------------------------
 // Initialize
 // ------------------------
-getCurrentUser()
+loadUser()
 loadServers()
