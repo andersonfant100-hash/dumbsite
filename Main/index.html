@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Joetalk</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coolio Chat</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app">
-    <!-- Sidebar: Servers -->
-    <div class="sidebar">
-      <div class="server-list" id="server-list">
-        <!-- Servers will be dynamically added here -->
-      </div>
-      <button id="add-server-btn">+</button>
-    </div>
-
-    <!-- Main content -->
-    <div class="main">
-      <!-- Channels list -->
-      <div class="channels">
-        <h3>Channels</h3>
-        <ul id="channel-list">
-          <!-- Channels appear here -->
-        </ul>
-      </div>
-
-      <!-- Chat area -->
-      <div class="chat">
-        <div id="messages"></div>
-        <div class="input-area">
-          <input type="text" id="message-input" placeholder="Message #general" />
-          <button id="send-btn">Send</button>
-        </div>
-      </div>
+<div id="app">
+  <!-- Sidebar: Servers -->
+  <div id="sidebar">
+    <div id="server-list"></div>
+    <div id="user-info">
+      <img id="user-avatar" src="" alt="avatar">
+      <span id="user-name">Loading...</span>
     </div>
   </div>
 
-  <script type="module" src="app.js"></script>
+  <!-- Main chat -->
+  <div id="main">
+    <!-- Channel list -->
+    <ul id="channel-list"></ul>
+
+    <!-- Messages -->
+    <div id="messages-container">
+      <div id="messages"></div>
+      <div id="send-message">
+        <input id="message-input" type="text" placeholder="Message #general">
+        <button id="send-btn">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js" type="module"></script>
 </body>
 </html>
