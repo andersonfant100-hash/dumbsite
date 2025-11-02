@@ -4,16 +4,15 @@ import { createClient } from '@supabase/supabase-js'
 // Supabase client setup
 // ------------------------
 const supabase = createClient(
-  'https://dwpxtoojztqhhhohwxwc.supabase.co', // your project URL
+  'https://dwpxtoojztqhhhohwxwc.supabase.co', // project URL
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3cHh0b29qenRxaGhob2h3eHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMjU1MDUsImV4cCI6MjA3NzYwMTUwNX0.XsKi3yPO0dewL3_eUTPqZAMD8BtAwGXHGrmiX81Q_KI' // your anon public key
 )
 
 let currentChannelId = null
 let userId = null
 
-// ------------------------
 // Get current logged-in user
-// ------------------------
+
 async function getCurrentUser() {
   const { data: { user } } = await supabase.auth.getUser()
   userId = user?.id
@@ -21,9 +20,8 @@ async function getCurrentUser() {
 }
 getCurrentUser()
 
-// ------------------------
 // Load servers
-// ------------------------
+
 async function loadServers() {
   const { data: servers } = await supabase
     .from('servers')
@@ -39,9 +37,8 @@ async function loadServers() {
 }
 loadServers()
 
-// ------------------------
 // Load channels
-// ------------------------
+
 async function loadChannels(serverId) {
   const { data: channels } = await supabase
     .from('channels')
@@ -57,9 +54,8 @@ async function loadChannels(serverId) {
   })
 }
 
-// ------------------------
 // Load messages
-// ------------------------
+
 async function loadMessages(channelId) {
   currentChannelId = channelId
   const { data } = await supabase
@@ -80,9 +76,8 @@ async function loadMessages(channelId) {
     .subscribe()
 }
 
-// ------------------------
 // Send a message
-// ------------------------
+
 document.getElementById('send-btn').addEventListener('click', async () => {
   const input = document.getElementById('message-input')
   if (!currentChannelId) return alert('Select a channel first!')
@@ -92,3 +87,4 @@ document.getElementById('send-btn').addEventListener('click', async () => {
   ])
   input.value = ''
 })
+
