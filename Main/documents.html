@@ -32,7 +32,6 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 <div class="nav-bar">
     <button onclick="goTo('index.html')">Home</button>
     <button onclick="goTo('settings.html')">Settings</button>
-    <button onclick="goTo('about:blank', true)">Hide</button>
 </div>
 
 <div class="games-grid">
@@ -47,14 +46,18 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 
 <script>
 // Anti-close tab only on tab/window close
-window.onbeforeunload = function(e){
-    return "Do you want to leave this site?";
-}
+let allowNavigation = false;
+window.addEventListener('beforeunload', function (e) {
+    if (!allowNavigation) {
+        e.preventDefault();
+        e.returnValue = "Do you want to leave this site?";
+        return "Do you want to leave this site?";
+    }
+});
 
-function goTo(url, isHide=false){
-    window.onbeforeunload = null;
-    if(isHide){ window.open(url,"_self"); }
-    else { location.href = url; }
+function goTo(url){
+    allowNavigation = true;
+    location.href = url;
 }
 
 // ===== Particles =====
