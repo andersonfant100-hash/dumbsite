@@ -1,42 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coolio Chat</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coolio Music Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: #121212;
+            color: #fff;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background-color: #1f1f1f;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            text-align: center;
+            color: #1DB954; /* Spotify green */
+        }
+
+        .sidebar button {
+            background: none;
+            border: none;
+            color: #fff;
+            text-align: left;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+
+        .sidebar button:hover {
+            background-color: #333;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome h1 {
+            font-size: 2.5rem;
+            color: #1DB954;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        /* Music Player */
+        #playlist {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #playlist button {
+            background-color: #1DB954;
+            border: none;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        #playlist button:hover {
+            background-color: #1ed760;
+        }
+
+        #player {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            .sidebar h2 {
+                flex: 1;
+            }
+            .sidebar button {
+                flex: 1;
+                margin: 0 5px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div id="app">
-  <!-- Sidebar -->
-  <div id="sidebar">
-    <div id="server-list"></div>
-    <div id="user-info">
-      <img id="user-avatar" src="" alt="avatar">
-      <span id="user-name">Loading...</span>
+
+    <div class="sidebar">
+        <h2>Coolio Hub</h2>
+        <button id="gamesBtn">Games</button>
+        <!-- More sidebar buttons can be added here -->
     </div>
-  </div>
 
-  <!-- Main chat -->
-  <div id="main">
-    <!-- Channels -->
-    <ul id="channel-list"></ul>
+    <div class="main">
+        <div class="welcome">
+            <h1>Welcome to Coolio Music Hub!</h1>
+            <p>Listen to your favorite tracks directly from Spotify.</p>
+        </div>
 
-    <!-- Messages -->
-    <div id="messages-container">
-      <div id="messages"></div>
-      <div id="send-message">
-        <input id="message-input" type="text" placeholder="Message #general">
-        <button id="send-btn">Send</button>
-      </div>
+        <div id="playlist">
+            <button onclick="playSpotify('3n3Ppam7vgaVa1iaRUc9Lp')">Song 1</button>
+            <button onclick="playSpotify('0VjIjW4GlUZAMYd2vXMi3b')">Song 2</button>
+            <button onclick="playSpotify('7ouMYWpwJ422jRcDASZB7P')">Song 3</button>
+        </div>
+
+        <div id="player"></div>
     </div>
-  </div>
-</div>
 
-<!-- Supabase JS CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+    <script>
+        function playSpotify(id) {
+            document.getElementById('player').innerHTML = `
+                <iframe style="border-radius:12px"
+                    src="https://open.spotify.com/embed/track/${id}"
+                    width="400" height="80"
+                    frameborder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+                </iframe>`;
+        }
+    </script>
 
-<!-- Your App JS -->
-<script type="module" src="app.js"></script>
 </body>
 </html>
