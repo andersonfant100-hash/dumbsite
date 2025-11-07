@@ -17,9 +17,9 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
     height: 60px;
     background: #1f1f1f;
     display: flex;
-    justify-content: flex-start; /* buttons stick together */
+    justify-content: flex-start;
     align-items: center;
-    gap: 15px; /* space between buttons */
+    gap: 15px;
     padding: 0 20px;
     z-index: 10;
 }
@@ -43,6 +43,7 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
     <button onclick="location.href='index.html'">Home</button>
     <button onclick="location.href='documents.html'">Games</button>
     <button onclick="location.href='settings.html'">Settings</button>
+    <button onclick="location.href='about:blank'">Hide</button>
 </div>
 
 <div class="center-content">
@@ -51,7 +52,12 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 </div>
 
 <script>
-// ===== Shared Particle Settings =====
+// ===== Anti-close tab =====
+window.onbeforeunload = function(e){
+    return "Do you want to leave this site?";
+}
+
+// ===== Particle Settings =====
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
 let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
