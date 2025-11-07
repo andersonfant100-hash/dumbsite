@@ -17,12 +17,12 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
     height: 60px;
     background: #1f1f1f;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* buttons stick together */
     align-items: center;
-    padding: 0 40px;
+    gap: 15px; /* space between buttons */
+    padding: 0 20px;
     z-index: 10;
 }
-.nav-bar .left-buttons, .nav-bar .right-buttons { display: flex; gap: 15px; }
 .nav-bar button {
     background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s;
 }
@@ -40,13 +40,9 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 <canvas id="particles"></canvas>
 
 <div class="nav-bar">
-    <div class="left-buttons">
-        <button onclick="location.href='index.html'">Home</button>
-    </div>
-    <div class="right-buttons">
-        <button onclick="location.href='documents.html'">Games</button>
-        <button onclick="location.href='settings.html'">Settings</button>
-    </div>
+    <button onclick="location.href='index.html'">Home</button>
+    <button onclick="location.href='documents.html'">Games</button>
+    <button onclick="location.href='settings.html'">Settings</button>
 </div>
 
 <div class="center-content">
