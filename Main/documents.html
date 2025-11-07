@@ -10,9 +10,14 @@
 body{background:rgb(18,18,18);color:#fff;}
 canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 
-.nav-bar{position:fixed;top:0;width:100%;height:60px;background:#1f1f1f;display:flex;align-items:center;padding:0 20px;gap:10px;z-index:10;}
-.nav-bar button{background:#1DB954;border:none;color:#fff;padding:10px 20px;border-radius:6px;cursor:pointer;transition:0.2s;}
-.nav-bar button:hover{background:#14a33f;}
+.nav-bar{
+    position:fixed; top:0; width:100%; height:60px; background:#1f1f1f;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0 40px; z-index:10;
+}
+.nav-bar .left-buttons,.nav-bar .right-buttons{ display:flex; gap:15px; }
+.nav-bar button{ background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s; }
+.nav-bar button:hover{ background:#14a33f; }
 
 .games-grid{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:100px 40px 40px;position:relative;z-index:1;}
 .game-card{width:180px;background:#1f1f1f;padding:15px;border-radius:12px;text-align:center;transition:0.2s;}
@@ -26,8 +31,12 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 <canvas id="particles"></canvas>
 
 <div class="nav-bar">
-    <button onclick="location.href='index.html'">Home</button>
-    <button onclick="location.href='settings.html'">Settings</button>
+    <div class="left-buttons">
+        <button onclick="location.href='index.html'">Home</button>
+    </div>
+    <div class="right-buttons">
+        <button onclick="location.href='settings.html'">Settings</button>
+    </div>
 </div>
 
 <div class="games-grid">
@@ -40,7 +49,7 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 </div>
 
 <script>
-// ===== Same particle script as index.html =====
+// ===== Particle Script =====
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
 let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
@@ -55,8 +64,7 @@ document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b
 
 class Particle{constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.radius=2+Math.random()*2;this.vx=(Math.random()-0.5)*1.5;this.vy=(Math.random()-0.5)*1.5;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`;ctx.fill();}update(){if(this.x<0||this.x>canvas.width)this.vx*=-1;if(this.y<0||this.y>canvas.height)this.vy*=-1;this.x+=this.vx;this.y+=this.vy;}}
 let particlesArray=[];
-function initParticles(){particlesArray=[];for(let i=0;i<particleAmount;i++){particlesArray.push(new Particle());}}
-initParticles();
+for(let i=0;i<particleAmount;i++){particlesArray.push(new Particle());}
 function connectParticles(){for(let a=0;a<particlesArray.length;a++){for(let b=a+1;b<particlesArray.length;b++){let dx=particlesArray[a].x-particlesArray[b].x;let dy=particlesArray[a].y-particlesArray[b].y;let distance=Math.sqrt(dx*dx+dy*dy);if(distance<particleLineDistance){ctx.beginPath();ctx.strokeStyle=`rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-distance/particleLineDistance})`;ctx.lineWidth=1;ctx.moveTo(particlesArray[a].x,particlesArray[a].y);ctx.lineTo(particlesArray[b].x,particlesArray[b].y);ctx.stroke();}}}}
 function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});connectParticles();requestAnimationFrame(animate);}
 animate();
