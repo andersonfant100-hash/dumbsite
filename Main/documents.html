@@ -41,20 +41,20 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 </div>
 
 <script>
-// ===== Anti-Leave Dialog =====
-let warnOnLeave = true;
-window.addEventListener('beforeunload', function(e){
-    if(warnOnLeave){
-        e.preventDefault();
-        e.returnValue = '';
-    }
-});
+// ===== Anti-Close for this page ONLY =====
+function beforeUnloadHandler(e){
+    e.preventDefault();
+    e.returnValue = ''; // triggers default browser confirmation
+}
+window.addEventListener('beforeunload', beforeUnloadHandler);
+
+// Navigation buttons bypass warning
 function goTo(url){
-    warnOnLeave = false;
+    window.removeEventListener('beforeunload', beforeUnloadHandler);
     location.href = url;
 }
 
-// ===== Particle Script (same as index.html) =====
+// ===== Particle Script =====
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
 let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
