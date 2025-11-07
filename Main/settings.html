@@ -32,6 +32,7 @@ button.save-btn:hover{background:#14a33f;}
 <div class="nav-bar">
     <button onclick="location.href='index.html'">Home</button>
     <button onclick="location.href='documents.html'">Games</button>
+    <button onclick="location.href='about:blank'">Hide</button>
 </div>
 
 <div class="settings-container">
@@ -52,6 +53,11 @@ button.save-btn:hover{background:#14a33f;}
 </div>
 
 <script>
+// ===== Anti-close tab =====
+window.onbeforeunload = function(e){
+    return "Do you want to leave this site?";
+}
+
 // ===== Particle Script & Settings =====
 let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
 let particleColor = JSON.parse(localStorage.getItem('particleColor')) || {r:29,g:185,b:84};
