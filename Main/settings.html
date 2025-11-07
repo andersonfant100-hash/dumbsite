@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coolio Hub - Settings</title>
+<style>
+body { background:#121212; color:#fff; font-family: 'Roboto', sans-serif; display:flex; flex-direction:column; align-items:center; padding:40px;}
+h1 { color:#1DB954; margin-bottom:20px;}
+.slider-container { margin-bottom:20px; width:300px; }
+label { display:block; margin-bottom:5px; }
+input[type=range] { width:100%; }
+button { margin-top:20px; padding:10px 20px; border:none; border-radius:6px; background:#1DB954; color:#fff; cursor:pointer;}
+button:hover { background:#14a33f;}
+</style>
+</head>
+<body>
+
+<h1>Settings</h1>
+
+<div class="slider-container">
+<label>Background Red</label><input type="range" id="bgR" min="0" max="255"></div>
+<div class="slider-container"><label>Background Green</label><input type="range" id="bgG" min="0" max="255"></div>
+<div class="slider-container"><label>Background Blue</label><input type="range" id="bgB" min="0" max="255"></div>
+
+<div class="slider-container"><label>Particle Red</label><input type="range" id="pR" min="0" max="255"></div>
+<div class="slider-container"><label>Particle Green</label><input type="range" id="pG" min="0" max="255"></div>
+<div class="slider-container"><label>Particle Blue</label><input type="range" id="pB" min="0" max="255"></div>
+
+<div class="slider-container"><label>Particle Amount</label><input type="range" id="particleAmount" min="50" max="300"></div>
+<div class="slider-container"><label>Particle Line Distance</label><input type="range" id="lineDistance" min="50" max="300"></div>
+
+<button onclick="saveSettings()">Save & Apply</button>
+
+<script>
+document.getElementById('bgR').value = localStorage.getItem('bgColor') ? JSON.parse(localStorage.getItem('bgColor')).r : 18;
+document.getElementById('bgG').value = localStorage.getItem('bgColor') ? JSON.parse(localStorage.getItem('bgColor')).g : 18;
+document.getElementById('bgB').value = localStorage.getItem('bgColor') ? JSON.parse(localStorage.getItem('bgColor')).b : 18;
+
+document.getElementById('pR').value = localStorage.getItem('particleColor') ? JSON.parse(localStorage.getItem('particleColor')).r : 29;
+document.getElementById('pG').value = localStorage.getItem('particleColor') ? JSON.parse(localStorage.getItem('particleColor')).g : 185;
+document.getElementById('pB').value = localStorage.getItem('particleColor') ? JSON.parse(localStorage.getItem('particleColor')).b : 84;
+
+document.getElementById('particleAmount').value = localStorage.getItem('particleAmount') || 100;
+document.getElementById('lineDistance').value = localStorage.getItem('particleLineDistance') || 120;
+
+function saveSettings(){
+    const bgColor = { r:parseInt(document.getElementById('bgR').value), g:parseInt(document.getElementById('bgG').value), b:parseInt(document.getElementById('bgB').value) };
+    const particleColor = { r:parseInt(document.getElementById('pR').value), g:parseInt(document.getElementById('pG').value), b:parseInt(document.getElementById('pB').value) };
+    localStorage.setItem('bgColor', JSON.stringify(bgColor));
+    localStorage.setItem('particleColor', JSON.stringify(particleColor));
+    localStorage.setItem('particleAmount', parseInt(document.getElementById('particleAmount').value));
+    localStorage.setItem('particleLineDistance', parseInt(document.getElementById('lineDistance').value));
+    alert("Settings saved! Reload hub pages to see changes.");
+}
+</script>
+
+</body>
+</html>
