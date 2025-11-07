@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
-body{background:rgb(18,18,18);color:#fff;}
+body{background:rgb(18,18,18);color:#fff;overflow:hidden;}
 canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 
 .nav-bar{
@@ -32,6 +32,7 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 <div class="nav-bar">
     <button onclick="location.href='index.html'">Home</button>
     <button onclick="location.href='settings.html'">Settings</button>
+    <button onclick="location.href='about:blank'">Hide</button>
 </div>
 
 <div class="games-grid">
@@ -41,9 +42,15 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
             <p>Basketball Random</p>
         </a>
     </div>
+    <!-- Add more games here -->
 </div>
 
 <script>
+// ===== Anti-close tab =====
+window.onbeforeunload = function(e){
+    return "Do you want to leave this site?";
+}
+
 // ===== Particle Script =====
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
