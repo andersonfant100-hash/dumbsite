@@ -34,8 +34,8 @@ button.save-btn:hover{background:#14a33f;}
 <canvas id="particles"></canvas>
 
 <div class="nav-bar">
-    <button onclick="goTo('index.html')">Home</button>
-    <button onclick="goTo('documents.html')">Games</button>
+    <button onclick="location.href='index.html'">Home</button>
+    <button onclick="location.href='documents.html'">Games</button>
 </div>
 
 <div class="settings-container">
@@ -56,19 +56,6 @@ button.save-btn:hover{background:#14a33f;}
 </div>
 
 <script>
-// ===== Anti-Leave Dialog =====
-let warnOnLeave = true;
-window.addEventListener('beforeunload', function(e){
-    if(warnOnLeave){
-        e.preventDefault();
-        e.returnValue = '';
-    }
-});
-function goTo(url){
-    warnOnLeave = false; // disable warning for nav buttons
-    location.href = url;
-}
-
 // ===== Particle Setup =====
 let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
 let particleColor = JSON.parse(localStorage.getItem('particleColor')) || {r:29,g:185,b:84};
