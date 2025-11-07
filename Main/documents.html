@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coolio Hub - Games</title>
+<title>Coolio Hub - Documents</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
@@ -18,11 +18,13 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 .nav-bar button{ background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s; }
 .nav-bar button:hover{ background:#14a33f; }
 
-.games-grid{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:100px 40px 40px;position:relative;z-index:1;}
-.game-card{width:180px;background:#1f1f1f;padding:15px;border-radius:12px;text-align:center;transition:0.2s;}
-.game-card:hover{background:#333;}
-.game-card img{width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:10px;}
-.game-card p{color:#1DB954;font-weight:bold;}
+.document-container{
+    position:relative; z-index:1; padding:100px 40px 40px; max-width:800px; margin:0 auto;
+}
+textarea#documentArea{
+    width:100%; height:500px; padding:15px; border-radius:10px; border:none; font-size:1rem;
+    background:#2a2a2a; color:#fff; resize:none;
+}
 </style>
 </head>
 <body>
@@ -34,33 +36,36 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
     <button onclick="goTo('settings.html')">Settings</button>
 </div>
 
-<div class="games-grid">
-    <div class="game-card">
-        <a href="Games/basket-random/basket-random.html">
-            <img src="Games/basket-random/splash.jpeg" alt="Basketball Random">
-            <p>Basketball Random</p>
-        </a>
-    </div>
-    <!-- Add more games here -->
+<div class="document-container">
+    <h1>Document Editor</h1>
+    <textarea id="documentArea" placeholder="Start typing..."></textarea>
 </div>
 
 <script>
-// Anti-close tab only on tab/window close
-let allowNavigation = false;
-window.addEventListener('beforeunload', function (e) {
-    if (!allowNavigation) {
-        e.preventDefault();
-        e.returnValue = "Do you want to leave this site?";
-        return "Do you want to leave this site?";
-    }
-});
+// ===== Unsaved Changes Handling =====
+let unsavedChanges = false;
+const textArea = document.getElementById('documentArea');
+textArea.addEventListener('input', () => { unsavedChanges = true; });
 
+// Navigation function
 function goTo(url){
-    allowNavigation = true;
+    if(unsavedChanges){
+        const confirmLeave = confirm("You have unsaved changes. Are you sure you want to leave?");
+        if(!confirmLeave) return; // stop navigation
+    }
+    unsavedChanges = false; // navigating away
     location.href = url;
 }
 
-// ===== Particles =====
+// Anti-close tab for unsaved changes
+window.addEventListener('beforeunload', function(e){
+    if(unsavedChanges){
+        e.preventDefault();
+        e.returnValue = ''; // triggers default browser confirm
+    }
+});
+
+// ===== Particles Script =====
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
 let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
@@ -73,11 +78,40 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
 
-class Particle{constructor(){this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.radius=2+Math.random()*2; this.vx=(Math.random()-0.5)*1.5; this.vy=(Math.random()-0.5)*1.5;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`;ctx.fill();}update(){if(this.x<0||this.x>canvas.width)this.vx*=-1;if(this.y<0||this.y>canvas.height)this.vy*=-1;this.x+=this.vx;this.y+=this.vy;}}
-let particlesArray=[]; for(let i=0;i<particleAmount;i++){particlesArray.push(new Particle());}
+class Particle{
+    constructor(){this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.radius=2+Math.random()*2; this.vx=(Math.random()-0.5)*1.5; this.vy=(Math.random()-0.5)*1.5;}
+    draw(){ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`; ctx.fill();}
+    update(){if(this.x<0||this.x>canvas.width)this.vx*=-1; if(this.y<0||this.y>canvas.height)this.vy*=-1; this.x+=this.vx; this.y+=this.vy;}
+}
 
-function connectParticles(){for(let a=0;a<particlesArray.length;a++){for(let b=a+1;b<particlesArray.length;b++){let dx=particlesArray[a].x-particlesArray[b].x;let dy=particlesArray[a].y-particlesArray[b].y;let distance=Math.sqrt(dx*dx+dy*dy);if(distance<particleLineDistance){ctx.beginPath();ctx.strokeStyle=`rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-distance/particleLineDistance})`;ctx.lineWidth=1;ctx.moveTo(particlesArray[a].x,particlesArray[a].y);ctx.lineTo(particlesArray[b].x,particlesArray[b].y);ctx.stroke();}}}}
-function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});connectParticles();requestAnimationFrame(animate);}
+let particlesArray = [];
+for(let i=0;i<particleAmount;i++){particlesArray.push(new Particle());}
+
+function connectParticles(){
+    for(let a=0;a<particlesArray.length;a++){
+        for(let b=a+1;b<particlesArray.length;b++){
+            let dx=particlesArray[a].x-particlesArray[b].x;
+            let dy=particlesArray[a].y-particlesArray[b].y;
+            let distance=Math.sqrt(dx*dx+dy*dy);
+            if(distance<particleLineDistance){
+                ctx.beginPath();
+                ctx.strokeStyle=`rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-distance/particleLineDistance})`;
+                ctx.lineWidth=1;
+                ctx.moveTo(particlesArray[a].x,particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x,particlesArray[b].y);
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+function animate(){
+    document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particlesArray.forEach(p=>{p.update();p.draw();});
+    connectParticles();
+    requestAnimationFrame(animate);
+}
 animate();
 </script>
 
