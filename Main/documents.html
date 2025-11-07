@@ -26,8 +26,8 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 <canvas id="particles"></canvas>
 
 <div class="nav-bar">
-    <button onclick="goTo('index.html')">Home</button>
-    <button onclick="goTo('settings.html')">Settings</button>
+    <button onclick="location.href='index.html'">Home</button>
+    <button onclick="location.href='settings.html'">Settings</button>
 </div>
 
 <div class="games-grid">
@@ -41,19 +41,6 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 </div>
 
 <script>
-// ===== Anti-Close for this page ONLY =====
-function beforeUnloadHandler(e){
-    e.preventDefault();
-    e.returnValue = ''; // triggers default browser confirmation
-}
-window.addEventListener('beforeunload', beforeUnloadHandler);
-
-// Navigation buttons bypass warning
-function goTo(url){
-    window.removeEventListener('beforeunload', beforeUnloadHandler);
-    location.href = url;
-}
-
 // ===== Particle Script =====
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
