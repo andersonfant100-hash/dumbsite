@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
-body, html { width:100%; height:100%; overflow:hidden; background:rgb(18,18,18); color:#fff; }
+body, html { width:100%; height:100%; overflow:hidden; }
 canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
 
 .nav-bar {
@@ -48,13 +48,11 @@ let particleColor = JSON.parse(localStorage.getItem('particleColor')) || {r:29,g
 
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
-
 function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-function updateBackground(){ document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`; }
-updateBackground();
+document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
 
 class Particle{
     constructor(){
@@ -64,24 +62,12 @@ class Particle{
         this.vx=(Math.random()-0.5)*1.5;
         this.vy=(Math.random()-0.5)*1.5;
     }
-    draw(){
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
-        ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`;
-        ctx.fill();
-    }
-    update(){
-        if(this.x<0||this.x>canvas.width)this.vx*=-1;
-        if(this.y<0||this.y>canvas.height)this.vy*=-1;
-        this.x+=this.vx; this.y+=this.vy;
-    }
+    draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`; ctx.fill(); }
+    update(){ if(this.x<0||this.x>canvas.width)this.vx*=-1; if(this.y<0||this.y>canvas.height)this.vy*=-1; this.x+=this.vx; this.y+=this.vy; }
 }
 
 let particlesArray=[];
-function initParticles(){
-    particlesArray=[];
-    for(let i=0;i<particleAmount;i++){ particlesArray.push(new Particle()); }
-}
+function initParticles(){ particlesArray=[]; for(let i=0;i<particleAmount;i++){ particlesArray.push(new Particle()); } }
 initParticles();
 
 function connectParticles(){
@@ -104,7 +90,7 @@ function connectParticles(){
 
 function animate(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    particlesArray.forEach(p=>{p.update();p.draw();});
+    particlesArray.forEach(p=>{p.update(); p.draw();});
     connectParticles();
     requestAnimationFrame(animate);
 }
