@@ -3,28 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coolio Hub - Documents</title>
+<title>Coolio Hub - Games</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
 body{background:rgb(18,18,18);color:#fff;overflow:hidden;}
 canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 
-.nav-bar{
-    position:fixed; top:0; width:100%; height:60px; background:#1f1f1f;
-    display:flex; justify-content:flex-start; align-items:center;
-    gap:15px; padding:0 20px; z-index:10;
-}
+.nav-bar{position:fixed; top:0; width:100%; height:60px; background:#1f1f1f; display:flex; justify-content:flex-start; align-items:center; gap:15px; padding:0 20px; z-index:10;}
 .nav-bar button{ background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s; }
 .nav-bar button:hover{ background:#14a33f; }
 
-.document-container{
-    position:relative; z-index:1; padding:100px 40px 40px; max-width:800px; margin:0 auto;
-}
-textarea#documentArea{
-    width:100%; height:500px; padding:15px; border-radius:10px; border:none; font-size:1rem;
-    background:#2a2a2a; color:#fff; resize:none;
-}
+.games-grid{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:100px 40px 40px;position:relative;z-index:1;}
+.game-card{width:180px;background:#1f1f1f;padding:15px;border-radius:12px;text-align:center;transition:0.2s;}
+.game-card:hover{background:#333;}
+.game-card img{width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:10px;}
+.game-card p{color:#1DB954;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -36,36 +30,31 @@ textarea#documentArea{
     <button onclick="goTo('settings.html')">Settings</button>
 </div>
 
-<div class="document-container">
-    <h1>Document Editor</h1>
-    <textarea id="documentArea" placeholder="Start typing..."></textarea>
+<div class="games-grid">
+    <div class="game-card">
+        <a href="Games/basket-random/basket-random.html">
+            <img src="Games/basket-random/splash.jpeg" alt="Basketball Random">
+            <p>Basketball Random</p>
+        </a>
+    </div>
+    <!-- Add more games here -->
 </div>
 
 <script>
-// ===== Unsaved Changes Handling =====
-let unsavedChanges = false;
-const textArea = document.getElementById('documentArea');
-textArea.addEventListener('input', () => { unsavedChanges = true; });
-
-// Navigation function
-function goTo(url){
-    if(unsavedChanges){
-        const confirmLeave = confirm("You have unsaved changes. Are you sure you want to leave?");
-        if(!confirmLeave) return; // stop navigation
+// ===== Anti-Leave Dialog =====
+let warnOnLeave = true;
+window.addEventListener('beforeunload', function(e){
+    if(warnOnLeave){
+        e.preventDefault();
+        e.returnValue = '';
     }
-    unsavedChanges = false; // navigating away
+});
+function goTo(url){
+    warnOnLeave = false;
     location.href = url;
 }
 
-// Anti-close tab for unsaved changes
-window.addEventListener('beforeunload', function(e){
-    if(unsavedChanges){
-        e.preventDefault();
-        e.returnValue = ''; // triggers default browser confirm
-    }
-});
-
-// ===== Particles Script =====
+// ===== Particle Script (same as index.html) =====
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
 let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
