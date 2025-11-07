@@ -1,1 +1,8 @@
-placeholder
+.game-card {
+    width: 180px;          /* all cards the same width */
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    background-color: #1f1f1f;
+    transition: 0.2s;
+}
