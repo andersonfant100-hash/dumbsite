@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coolio Hub - Settings</title>
 <style>
-body { background:#121212; color:#fff; font-family: 'Roboto', sans-serif; display:flex; flex-direction:column; align-items:center; padding:40px;}
-h1 { color:#1DB954; margin-bottom:20px;}
+body { margin:0; padding:0; font-family:'Roboto',sans-serif; overflow:hidden; }
+canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+.settings-container { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; padding:40px; color:#fff; }
+h1 { color:#1DB954; margin-bottom:20px; }
 .slider-container { margin-bottom:20px; width:300px; }
 label { display:block; margin-bottom:5px; }
 input[type=range] { width:100%; }
@@ -16,10 +18,12 @@ button:hover { background:#14a33f;}
 </head>
 <body>
 
+<canvas id="particles"></canvas>
+
+<div class="settings-container">
 <h1>Settings</h1>
 
-<div class="slider-container">
-<label>Background Red</label><input type="range" id="bgR" min="0" max="255"></div>
+<div class="slider-container"><label>Background Red</label><input type="range" id="bgR" min="0" max="255"></div>
 <div class="slider-container"><label>Background Green</label><input type="range" id="bgG" min="0" max="255"></div>
 <div class="slider-container"><label>Background Blue</label><input type="range" id="bgB" min="0" max="255"></div>
 
@@ -30,28 +34,114 @@ button:hover { background:#14a33f;}
 <div class="slider-container"><label>Particle Amount</label><input type="range" id="particleAmount" min="50" max="300"></div>
 <div class="slider-container"><label>Particle Line Distance</label><input type="range" id="lineDistance" min="50" max="300"></div>
 
-<button onclick="saveSettings()">Save & Apply</button>
+<button onclick="saveSettings()">Save Settings</button>
+</div>
 
 <script>
-document.getElementById('bgR').value = localStorage.getItem('bgColor') ? JSON.parse(localStorage.getItem('bgColor')).r : 18;
-document.getElementById('bgG').value = localStorage.getItem('bgColor') ? JSON.parse(localStorage.getItem('bgColor')).g : 18;
-document.getElementById('bgB').value = localStorage.getItem('bgColor') ? JSON.parse(localStorage.getItem('bgColor')).b : 18;
+// ===== Load settings =====
+let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
+let particleColor = JSON.parse(localStorage.getItem('particleColor')) || {r:29,g:185,b:84};
+let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
+let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
 
-document.getElementById('pR').value = localStorage.getItem('particleColor') ? JSON.parse(localStorage.getItem('particleColor')).r : 29;
-document.getElementById('pG').value = localStorage.getItem('particleColor') ? JSON.parse(localStorage.getItem('particleColor')).g : 185;
-document.getElementById('pB').value = localStorage.getItem('particleColor') ? JSON.parse(localStorage.getItem('particleColor')).b : 84;
+// Set sliders
+document.getElementById('bgR').value = bgColor.r;
+document.getElementById('bgG').value = bgColor.g;
+document.getElementById('bgB').value = bgColor.b;
 
-document.getElementById('particleAmount').value = localStorage.getItem('particleAmount') || 100;
-document.getElementById('lineDistance').value = localStorage.getItem('particleLineDistance') || 120;
+document.getElementById('pR').value = particleColor.r;
+document.getElementById('pG').value = particleColor.g;
+document.getElementById('pB').value = particleColor.b;
 
+document.getElementById('particleAmount').value = particleAmount;
+document.getElementById('lineDistance').value = particleLineDistance;
+
+// ===== Canvas setup =====
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+    constructor() {
+        this.x = Math.random()*canvas.width;
+        this.y = Math.random()*canvas.height;
+        this.radius = 2 + Math.random()*2;
+        this.vx = (Math.random()-0.5)*1.5;
+        this.vy = (Math.random()-0.5)*1.5;
+    }
+    draw(){
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+        ctx.fillStyle = `rgb(${particleColor.r},${particleColor.g},${particleColor.b})`;
+        ctx.fill();
+    }
+    update(){
+        if(this.x<0||this.x>canvas.width)this.vx*=-1;
+        if(this.y<0||this.y>canvas.height)this.vy*=-1;
+        this.x+=this.vx; this.y+=this.vy;
+    }
+}
+
+let particlesArray = [];
+function initParticles(){
+    particlesArray=[];
+    for(let i=0;i<particleAmount;i++){particlesArray.push(new Particle());}
+}
+initParticles();
+
+function connectParticles(){
+    for(let a=0;a<particlesArray.length;a++){
+        for(let b=a+1;b<particlesArray.length;b++){
+            let dx = particlesArray[a].x - particlesArray[b].x;
+            let dy = particlesArray[a].y - particlesArray[b].y;
+            let distance = Math.sqrt(dx*dx+dy*dy);
+            if(distance < particleLineDistance){
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-distance/particleLineDistance})`;
+                ctx.lineWidth=1;
+                ctx.moveTo(particlesArray[a].x,particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x,particlesArray[b].y);
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+function animate(){
+    document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particlesArray.forEach(p=>{p.update();p.draw();});
+    connectParticles();
+    requestAnimationFrame(animate);
+}
+animate();
+
+// ===== Live update sliders =====
+['bgR','bgG','bgB','pR','pG','pB','particleAmount','lineDistance'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',()=>{
+        bgColor.r = parseInt(document.getElementById('bgR').value);
+        bgColor.g = parseInt(document.getElementById('bgG').value);
+        bgColor.b = parseInt(document.getElementById('bgB').value);
+
+        particleColor.r = parseInt(document.getElementById('pR').value);
+        particleColor.g = parseInt(document.getElementById('pG').value);
+        particleColor.b = parseInt(document.getElementById('pB').value);
+
+        particleAmount = parseInt(document.getElementById('particleAmount').value);
+        particleLineDistance = parseInt(document.getElementById('lineDistance').value);
+        initParticles();
+    });
+});
+
+// ===== Save settings =====
 function saveSettings(){
-    const bgColor = { r:parseInt(document.getElementById('bgR').value), g:parseInt(document.getElementById('bgG').value), b:parseInt(document.getElementById('bgB').value) };
-    const particleColor = { r:parseInt(document.getElementById('pR').value), g:parseInt(document.getElementById('pG').value), b:parseInt(document.getElementById('pB').value) };
     localStorage.setItem('bgColor', JSON.stringify(bgColor));
     localStorage.setItem('particleColor', JSON.stringify(particleColor));
-    localStorage.setItem('particleAmount', parseInt(document.getElementById('particleAmount').value));
-    localStorage.setItem('particleLineDistance', parseInt(document.getElementById('lineDistance').value));
-    alert("Settings saved! Reload hub pages to see changes.");
+    localStorage.setItem('particleAmount', particleAmount);
+    localStorage.setItem('particleLineDistance', particleLineDistance);
+    alert("Settings saved! Changes are live.");
 }
 </script>
 
