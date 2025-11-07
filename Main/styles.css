@@ -1,8 +1,19 @@
+/* Game card container */
 .game-card {
-    width: 180px;          /* all cards the same width */
+    width: 180px;          /* width of each card */
     padding: 15px;
     border-radius: 12px;
     text-align: center;
     background-color: #1f1f1f;
     transition: 0.2s;
+}
+
+/* Game thumbnail images */
+.game-card img {
+    width: 100%;           /* fills the card width */
+    height: 120px;         /* uniform height */
+    object-fit: cover;     /* crops/resizes image nicely */
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 10px;
 }
