@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coolio Hub - Documents & Games</title>
+<title>Coolio Hub - Games</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
@@ -15,10 +15,10 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 .nav-bar button{ background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s; }
 .nav-bar button:hover{ background:#14a33f; }
 
-/* Grids */
+/* Grid for games */
 .grid-container{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:100px 40px 40px;position:relative;z-index:1;}
 
-/* Card UI */
+/* Game Card */
 .card {
     width:180px;
     background:#1f1f1f;
@@ -46,8 +46,7 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
     <button onclick="location.href='settings.html'">Settings</button>
 </div>
 
-    <!--Games-->
-<h2 style="text-align:center;margin-top:60px;">Games</h2>
+<h2 style="text-align:center;margin-top:80px;">Games</h2>
 <div class="grid-container">
     <div class="card">
         <a href="Games/basket-random/basket-random.html">
@@ -62,7 +61,8 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
             <p>Boxing Random</p>
         </a>
     </div>
-</div>
+
+    <!-- Add more game cards here -->
 </div>
 
 <script>
@@ -115,7 +115,7 @@ function animate(){
 }
 animate();
 
-// Leave site confirmation only on documents.html
+// Leave site confirmation only on games hub
 if (window.location.pathname.endsWith("documents.html")) {
     window.addEventListener("beforeunload", function (e) {
         e.preventDefault();
