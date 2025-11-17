@@ -1,4 +1,4 @@
-// Steam-style card tilt effect
+// Steam-style tilt effect for all cards
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
