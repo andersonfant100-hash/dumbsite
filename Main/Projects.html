@@ -62,7 +62,8 @@
     </div>
 </div>
 
-<!-- Particle Script -->
+<script src="card.js" defer></script>
+
 <script>
 // ===== Particle Script =====
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
@@ -112,18 +113,7 @@ function animate(){
     requestAnimationFrame(animate);
 }
 animate();
-
-// Leave site confirmation only on games hub
-if (window.location.pathname.endsWith("documents.html")) {
-    window.addEventListener("beforeunload", function (e) {
-        e.preventDefault();
-        e.returnValue = "";
-    });
-}
 </script>
-
-<!-- Steam-style tilt -->
-<script src="card.js" defer></script>
 
 </body>
 </html>
