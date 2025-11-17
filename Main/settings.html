@@ -6,6 +6,75 @@
 <title>Coolio Hub - Settings</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+body, html {
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:'Roboto',sans-serif;
+    background: rgb(18,18,18);
+}
+
+canvas#particles {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    pointer-events:none;
+}
+
+.nav-bar{
+    position:fixed; top:0; width:100%; height:60px; background:#1f1f1f;
+    display:flex; justify-content:flex-start; align-items:center;
+    gap:15px; padding:0 20px; z-index:10;
+}
+.nav-bar button{ background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s; }
+.nav-bar button:hover{ background:#14a33f; }
+
+.settings-container{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:300px;
+    color:#fff;
+}
+
+h1{ color:#1DB954; margin-bottom:20px; text-align:center; }
+
+.slider-container{
+    margin-bottom:15px;
+    width:100%;
+}
+.slider-container label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+.slider-container input[type=range]{
+    width:100%;
+}
+
+button.save-btn{
+    margin-top:20px;
+    padding:10px 20px;
+    border:none;
+    border-radius:6px;
+    background:#1DB954;
+    color:#fff;
+    cursor:pointer;
+    font-weight:bold;
+}
+button.save-btn:hover{ background:#14a33f; }
+</style>
 </head>
 <body>
 
@@ -19,78 +88,114 @@
 <div class="settings-container">
     <h1>Settings</h1>
 
-    <div class="slider-container">
-        <label>Background Red</label>
-        <input type="range" id="bgR" min="0" max="255">
-    </div>
-    <div class="slider-container">
-        <label>Background Green</label>
-        <input type="range" id="bgG" min="0" max="255">
-    </div>
-    <div class="slider-container">
-        <label>Background Blue</label>
-        <input type="range" id="bgB" min="0" max="255">
-    </div>
+    <div class="slider-container"><label>Background Red</label><input type="range" id="bgR" min="0" max="255"></div>
+    <div class="slider-container"><label>Background Green</label><input type="range" id="bgG" min="0" max="255"></div>
+    <div class="slider-container"><label>Background Blue</label><input type="range" id="bgB" min="0" max="255"></div>
 
-    <div class="slider-container">
-        <label>Particle Red</label>
-        <input type="range" id="pR" min="0" max="255">
-    </div>
-    <div class="slider-container">
-        <label>Particle Green</label>
-        <input type="range" id="pG" min="0" max="255">
-    </div>
-    <div class="slider-container">
-        <label>Particle Blue</label>
-        <input type="range" id="pB" min="0" max="255">
-    </div>
+    <div class="slider-container"><label>Particle Red</label><input type="range" id="pR" min="0" max="255"></div>
+    <div class="slider-container"><label>Particle Green</label><input type="range" id="pG" min="0" max="255"></div>
+    <div class="slider-container"><label>Particle Blue</label><input type="range" id="pB" min="0" max="255"></div>
 
-    <div class="slider-container">
-        <label>Particle Amount</label>
-        <input type="range" id="particleAmount" min="50" max="300">
-    </div>
-    <div class="slider-container">
-        <label>Particle Line Distance</label>
-        <input type="range" id="lineDistance" min="50" max="300">
-    </div>
+    <div class="slider-container"><label>Particle Amount</label><input type="range" id="particleAmount" min="50" max="300"></div>
+    <div class="slider-container"><label>Particle Line Distance</label><input type="range" id="lineDistance" min="50" max="300"></div>
 
     <button class="save-btn" onclick="saveSettings()">Save Settings</button>
 </div>
 
-<script src="particles.js" defer></script>
 <script>
 let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
 let particleColor = JSON.parse(localStorage.getItem('particleColor')) || {r:29,g:185,b:84};
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
 
-// Set initial slider values
-document.getElementById('bgR').value = bgColor.r;
-document.getElementById('bgG').value = bgColor.g;
-document.getElementById('bgB').value = bgColor.b;
-document.getElementById('pR').value = particleColor.r;
-document.getElementById('pG').value = particleColor.g;
-document.getElementById('pB').value = particleColor.b;
-document.getElementById('particleAmount').value = particleAmount;
-document.getElementById('lineDistance').value = particleLineDistance;
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
 
+class Particle{
+    constructor(){this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.radius=2+Math.random()*2; this.vx=(Math.random()-0.5)*1.5; this.vy=(Math.random()-0.5)*1.5;}
+    draw(){ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`; ctx.fill();}
+    update(){if(this.x<0||this.x>canvas.width)this.vx*=-1; if(this.y<0||this.y>canvas.height)this.vy*=-1; this.x+=this.vx; this.y+=this.vy;}
+}
+
+let particlesArray = [];
+for(let i=0;i<particleAmount;i++){particlesArray.push(new Particle());}
+
+// make particles react to cursor
+let mouse = {x:null,y:null};
+window.addEventListener('mousemove', (e)=>{mouse.x=e.clientX; mouse.y=e.clientY;});
+
+function connectParticles(){
+    for(let a=0;a<particlesArray.length;a++){
+        for(let b=a+1;b<particlesArray.length;b++){
+            let dx=particlesArray[a].x-particlesArray[b].x;
+            let dy=particlesArray[a].y-particlesArray[b].y;
+            let distance=Math.sqrt(dx*dx+dy*dy);
+            if(distance<particleLineDistance){
+                ctx.beginPath();
+                ctx.strokeStyle=`rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-distance/particleLineDistance})`;
+                ctx.lineWidth=1;
+                ctx.moveTo(particlesArray[a].x,particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x,particlesArray[b].y);
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+function animate(){
+    document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particlesArray.forEach(p=>{
+        p.update();
+        // simple attraction to cursor
+        if(mouse.x && mouse.y){
+            let dx = mouse.x - p.x;
+            let dy = mouse.y - p.y;
+            let dist = Math.sqrt(dx*dx+dy*dy);
+            if(dist<100){
+                p.vx += dx*0.0005;
+                p.vy += dy*0.0005;
+            }
+        }
+        p.draw();
+    });
+    connectParticles();
+    requestAnimationFrame(animate);
+}
+animate();
+
+// Set sliders to current values
+document.getElementById('bgR').value=bgColor.r;
+document.getElementById('bgG').value=bgColor.g;
+document.getElementById('bgB').value=bgColor.b;
+document.getElementById('pR').value=particleColor.r;
+document.getElementById('pG').value=particleColor.g;
+document.getElementById('pB').value=particleColor.b;
+document.getElementById('particleAmount').value=particlesArray.length;
+document.getElementById('lineDistance').value=particleLineDistance;
+
+// slider changes
 ['bgR','bgG','bgB','pR','pG','pB','particleAmount','lineDistance'].forEach(id=>{
     document.getElementById(id).addEventListener('input', ()=>{
-        bgColor.r = parseInt(document.getElementById('bgR').value);
-        bgColor.g = parseInt(document.getElementById('bgG').value);
-        bgColor.b = parseInt(document.getElementById('bgB').value);
-        particleColor.r = parseInt(document.getElementById('pR').value);
-        particleColor.g = parseInt(document.getElementById('pG').value);
-        particleColor.b = parseInt(document.getElementById('pB').value);
+        bgColor.r=parseInt(document.getElementById('bgR').value);
+        bgColor.g=parseInt(document.getElementById('bgG').value);
+        bgColor.b=parseInt(document.getElementById('bgB').value);
+        particleColor.r=parseInt(document.getElementById('pR').value);
+        particleColor.g=parseInt(document.getElementById('pG').value);
+        particleColor.b=parseInt(document.getElementById('pB').value);
 
-        let newAmount = parseInt(document.getElementById('particleAmount').value);
-        if(newAmount > particlesArray.length){
+        let newAmount=parseInt(document.getElementById('particleAmount').value);
+        if(newAmount>particlesArray.length){
             for(let i=particlesArray.length;i<newAmount;i++){particlesArray.push(new Particle());}
-        } else if(newAmount < particlesArray.length){
+        } else if(newAmount<particlesArray.length){
             particlesArray = particlesArray.slice(0,newAmount);
         }
 
-        particleLineDistance = parseInt(document.getElementById('lineDistance').value);
+        particleLineDistance=parseInt(document.getElementById('lineDistance').value);
     });
 });
 
