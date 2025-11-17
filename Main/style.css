@@ -41,18 +41,13 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 .center-content p { font-size:1.5rem; color:#ccc; }
 
 /* grid for games */
-.card {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-    transition: 0.2s;
-    height: 260px; /* <-- keeps ALL cards equal */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
 }
+
 
 /* Game Card */
 .card {
@@ -87,6 +82,7 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
     box-shadow: 0 0 20px rgba(29, 185, 84, 0.85);
 }
 /* === Card Styling (Steam Glow Outline) === */
+
 
 
 
