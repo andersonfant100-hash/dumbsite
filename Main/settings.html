@@ -5,29 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coolio Hub - Settings</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
-body{overflow:hidden;}
-canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-
-.nav-bar{
-    position:fixed; top:0; width:100%; height:60px; background:#1f1f1f;
-    display:flex; justify-content:flex-start; align-items:center;
-    gap:15px; padding:0 20px; z-index:10;
-}
-.nav-bar button{ background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s; }
-.nav-bar button:hover{ background:#14a33f; }
-
-.settings-container{
-    position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; padding:100px 40px 40px; color:#fff; max-width:400px; margin:0 auto;
-}
-h1{color:#1DB954;margin-bottom:20px;}
-.slider-container{margin-bottom:20px;width:100%;}
-label{display:block;margin-bottom:5px;}
-input[type=range]{width:100%;}
-button.save-btn{margin-top:20px;padding:10px 20px;border:none;border-radius:6px;background:#1DB954;color:#fff;cursor:pointer;}
-button.save-btn:hover{background:#14a33f;}
-</style>
+<link rel="stylesheet" href="style.css">
+<script src="particles.js" defer></script>
 </head>
 <body>
 
@@ -57,12 +36,11 @@ button.save-btn:hover{background:#14a33f;}
 
 <script>
 // ===== Particle Setup =====
-let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
-let particleColor = JSON.parse(localStorage.getItem('particleColor')) || {r:29,g:185,b:84};
+let bgColor = JSON.parse(localStorage.getItem('bgColor')) || { r: 18, g: 18, b: 18 };
+let particleColor = JSON.parse(localStorage.getItem('particleColor')) || { r: 29, g: 185, b: 84 };
 let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
 let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
 
-// Set initial slider values
 document.getElementById('bgR').value = bgColor.r;
 document.getElementById('bgG').value = bgColor.g;
 document.getElementById('bgB').value = bgColor.b;
@@ -72,52 +50,9 @@ document.getElementById('pB').value = particleColor.b;
 document.getElementById('particleAmount').value = particleAmount;
 document.getElementById('lineDistance').value = particleLineDistance;
 
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
-
-class Particle{
-    constructor(){this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.radius=2+Math.random()*2; this.vx=(Math.random()-0.5)*1.5; this.vy=(Math.random()-0.5)*1.5;}
-    draw(){ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`; ctx.fill();}
-    update(){if(this.x<0||this.x>canvas.width)this.vx*=-1; if(this.y<0||this.y>canvas.height)this.vy*=-1; this.x+=this.vx; this.y+=this.vy;}
-}
-
-let particlesArray = [];
-for(let i=0;i<particleAmount;i++){particlesArray.push(new Particle());}
-
-function connectParticles(){
-    for(let a=0;a<particlesArray.length;a++){
-        for(let b=a+1;b<particlesArray.length;b++){
-            let dx=particlesArray[a].x-particlesArray[b].x;
-            let dy=particlesArray[a].y-particlesArray[b].y;
-            let distance=Math.sqrt(dx*dx+dy*dy);
-            if(distance<particleLineDistance){
-                ctx.beginPath();
-                ctx.strokeStyle=`rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-distance/particleLineDistance})`;
-                ctx.lineWidth=1;
-                ctx.moveTo(particlesArray[a].x,particlesArray[a].y);
-                ctx.lineTo(particlesArray[b].x,particlesArray[b].y);
-                ctx.stroke();
-            }
-        }
-    }
-}
-
-function animate(){
-    document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    particlesArray.forEach(p=>{p.update();p.draw();});
-    connectParticles();
-    requestAnimationFrame(animate);
-}
-animate();
-
-// ===== Slider Updates =====
-['bgR','bgG','bgB','pR','pG','pB','particleAmount','lineDistance'].forEach(id=>{
-    document.getElementById(id).addEventListener('input',()=>{
+// Slider logic for live updates
+['bgR','bgG','bgB','pR','pG','pB','particleAmount','lineDistance'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
         bgColor.r = parseInt(document.getElementById('bgR').value);
         bgColor.g = parseInt(document.getElementById('bgG').value);
         bgColor.b = parseInt(document.getElementById('bgB').value);
@@ -136,8 +71,7 @@ animate();
     });
 });
 
-// ===== Save Settings =====
-function saveSettings(){
+function saveSettings() {
     localStorage.setItem('bgColor', JSON.stringify(bgColor));
     localStorage.setItem('particleColor', JSON.stringify(particleColor));
     localStorage.setItem('particleAmount', particlesArray.length);
