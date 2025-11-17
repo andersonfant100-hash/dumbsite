@@ -1,99 +1,81 @@
-/* General */
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
-body, html { width:100%; height:100%; overflow:hidden; background:rgb(18,18,18); color:#fff; }
+let particleAmount = parseInt(localStorage.getItem('particleAmount')) || 100;
+let particleLineDistance = parseInt(localStorage.getItem('particleLineDistance')) || 120;
+let bgColor = JSON.parse(localStorage.getItem('bgColor')) || {r:18,g:18,b:18};
+let particleColor = JSON.parse(localStorage.getItem('particleColor')) || {r:29,g:185,b:84};
 
-/* Particles canvas */
-canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
 
-/* Nav Bar */
-.nav-bar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 60px;
-    background: #1f1f1f;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 15px;
-    padding: 0 20px;
-    z-index: 10;
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
-.nav-bar button {
-    background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s;
-}
-.nav-bar button:hover { background:#14a33f; }
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+document.body.style.backgroundColor = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
 
-/* Grid for game cards */
-.grid-container {
-    display:flex;
-    flex-wrap:wrap;
-    gap:20px;
-    justify-content:center;
-    padding:100px 40px 40px;
-    position:relative;
-    z-index:1;
-}
-
-/* Game Card */
-.card {
-    width:220px;
-    background:#1f1f1f;
-    padding:15px;
-    border-radius:12px;
-    text-align:center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    perspective: 800px;
-    transform-style: preserve-3d;
-    position: relative;
-    --rx: 0deg;
-    --ry: 0deg;
-    transform: rotateX(var(--rx)) rotateY(var(--ry));
-}
-.card:hover {
-    background:#333;
-    box-shadow:0 15px 35px rgba(0,0,0,0.4);
-}
-.card img {
-    width:100%;
-    height:500px;
-    object-fit:cover;
-    border-radius:8px;
-    margin-bottom:10px;
-    pointer-events:none;
-}
-.card p {
-    color:#1DB954;
-    font-weight:bold;
-    margin-top:auto;
+class Particle {
+    constructor() {
+        this.x = Math.random()*canvas.width;
+        this.y = Math.random()*canvas.height;
+        this.radius = 2+Math.random()*2;
+        this.vx = (Math.random()-0.5)*1.5;
+        this.vy = (Math.random()-0.5)*1.5;
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+        ctx.fillStyle=`rgb(${particleColor.r},${particleColor.g},${particleColor.b})`;
+        ctx.fill();
+    }
+    update() {
+        if(this.x<0||this.x>canvas.width) this.vx*=-1;
+        if(this.y<0||this.y>canvas.height) this.vy*=-1;
+        this.x+=this.vx; this.y+=this.vy;
+    }
 }
 
-/* Settings container */
-.settings-container {
-    position:relative;
-    z-index:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:100px 40px 40px;
-    color:#fff;
-    max-width:400px;
-    margin:0 auto;
+let particlesArray = [];
+for(let i=0;i<particleAmount;i++) particlesArray.push(new Particle());
+
+let mouse = {x:null,y:null};
+window.addEventListener('mousemove', e=>{ mouse.x=e.x; mouse.y=e.y; });
+
+function connectParticles(){
+    for(let a=0;a<particlesArray.length;a++){
+        for(let b=a+1;b<particlesArray.length;b++){
+            let dx = particlesArray[a].x - particlesArray[b].x;
+            let dy = particlesArray[a].y - particlesArray[b].y;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            if(dist<particleLineDistance){
+                ctx.beginPath();
+                ctx.strokeStyle=`rgba(${particleColor.r},${particleColor.g},${particleColor.b},${1-dist/particleLineDistance})`;
+                ctx.lineWidth=1;
+                ctx.moveTo(particlesArray[a].x,particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x,particlesArray[b].y);
+                ctx.stroke();
+            }
+        }
+    }
 }
-.settings-container h1 { color:#1DB954; margin-bottom:20px; }
-.slider-container { margin-bottom:20px; width:100%; }
-label { display:block; margin-bottom:5px; }
-input[type=range] { width:100%; }
-button.save-btn {
-    margin-top:20px;
-    padding:10px 20px;
-    border:none;
-    border-radius:6px;
-    background:#1DB954;
-    color:#fff;
-    cursor:pointer;
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particlesArray.forEach(p=>{
+        p.update();
+        // repel particles from mouse
+        if(mouse.x && mouse.y){
+            let dx = p.x - mouse.x;
+            let dy = p.y - mouse.y;
+            let dist = Math.sqrt(dx*dx+dy*dy);
+            if(dist<50){
+                p.vx += dx/50;
+                p.vy += dy/50;
+            }
+        }
+        p.draw();
+    });
+    connectParticles();
+    requestAnimationFrame(animate);
 }
-button.save-btn:hover { background:#14a33f; }
+animate();
