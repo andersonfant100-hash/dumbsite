@@ -4,11 +4,16 @@ document.querySelectorAll('.card').forEach(card => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const rotateY = ((x / rect.width) - 0.5) * 15;
-        const rotateX = ((y / rect.height) - 0.5) * -15;
+        // Stronger rotation angles
+        const rotateY = ((x / rect.width) - 0.5) * 25; // Steam uses bigger rotation
+        const rotateX = ((y / rect.height) - 0.5) * -25;
 
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-        card.style.boxShadow = `0 20px 50px rgba(29,185,84,0.5)`;
+        // Move shadow dynamically with the mouse
+        const shadowX = ((x / rect.width) - 0.5) * -40;
+        const shadowY = ((y / rect.height) - 0.5) * -40;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+        card.style.boxShadow = `${shadowX}px ${shadowY}px 50px rgba(29,185,84,0.5)`;
     });
 
     card.addEventListener('mouseleave', () => {
