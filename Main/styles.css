@@ -60,9 +60,9 @@ body {
 .games-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 40px;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 80px;
 }
 
 .game-card {
@@ -90,3 +90,4 @@ body {
     color: #1DB954;
     font-weight: bold;
 }
+
