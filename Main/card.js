@@ -4,11 +4,9 @@ document.querySelectorAll('.card').forEach(card => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        // Strong Steam-style tilt
         const rotateY = ((x / rect.width) - 0.5) * 25;
         const rotateX = ((y / rect.height) - 0.5) * -25;
 
-        // Dynamic green shadow
         const shadowX = ((x / rect.width) - 0.5) * -30;
         const shadowY = ((y / rect.height) - 0.5) * -30;
 
