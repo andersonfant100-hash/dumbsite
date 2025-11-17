@@ -1,89 +1,94 @@
+/* ===== General ===== */
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
 body, html { width:100%; height:100%; overflow-x:hidden; background: rgb(18,18,18); color: #fff; }
-
 canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
 
-/* Nav Bar */
+/* ===== Nav Bar ===== */
 .nav-bar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 60px;
-    background: #1f1f1f;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 15px;
-    padding: 0 20px;
-    z-index: 10;
+  position: fixed;
+  top:0;
+  width:100%;
+  height:60px;
+  background:#1f1f1f;
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  gap:15px;
+  padding:0 20px;
+  z-index:10;
 }
 .nav-bar button {
-    background: #1DB954;
-    border: none;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
+  background:#1DB954;
+  border:none;
+  color:#fff;
+  padding:10px 20px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.2s;
 }
-.nav-bar button:hover { background: #14a33f; }
+.nav-bar button:hover { background:#14a33f; }
 
-/* Center content for index.html */
+/* ===== Center Content (index.html) ===== */
 .center-content {
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    text-align:center;
-    z-index:1;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  z-index:1;
 }
 .center-content h1 { font-size:4rem; color:#1DB954; margin-bottom:10px; }
 .center-content p { font-size:1.5rem; color:#ccc; }
 
-/* grid for games */
-.card img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 8px;
+/* ===== Grid for Projects ===== */
+.grid-container {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap:20px;
+  padding:100px 40px 40px;
+  max-width:1400px;
+  margin:0 auto;
+  z-index:1;
+  position:relative;
 }
 
-
-/* Game Card */
+/* ===== Game Card ===== */
 .card {
-    width:180px;
-    background:#1f1f1f;
-    padding:15px;
-    border-radius:12px;
-    text-align:center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    min-height:220px; /* uniform height */
-    perspective: 800px;
+  width:100%;
+  min-height:220px;
+  background:#1f1f1f;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  perspective:800px;
+  position:relative;
+  overflow:hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 10px rgba(29, 185, 84, 0.4);
 }
-.card:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
-.card img { width:100%; height:120px; object-fit:cover; border-radius:8px; margin-bottom:10px; pointer-events:none; }
-.card p { color:#1DB954; font-weight:bold; margin-top:auto; }
-
-/* === Card Styling (Steam Glow Outline) === */
-.card {
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-    /* Soft green glow outline */
-    box-shadow: 0 0 10px rgba(29, 185, 84, 0.40);
-}
-
 .card:hover {
-    box-shadow: 0 0 20px rgba(29, 185, 84, 0.85);
+  box-shadow:0 0 20px rgba(29, 185, 84, 0.85);
 }
-/* === Card Styling (Steam Glow Outline) === */
+.card img {
+  width:100%;
+  height:120px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-bottom:10px;
+  pointer-events:none;
+}
+.card p {
+  color:#1DB954;
+  font-weight:bold;
+  margin-top:auto;
+}
 
-
-
-
-
+/* ===== Steam-style card tilt variables ===== */
+.card {
+  --rx:0deg;
+  --ry:0deg;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+}
