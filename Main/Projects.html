@@ -39,7 +39,7 @@
             <p>Soccer Random</p>
         </a>
     </div>
-
+    
     <div class="card">
         <a href="Projects/mario/mario.html">
             <img src="Projects/mario/Theme/Mario.gif" alt="Mario">
@@ -53,7 +53,7 @@
             <p>Emulator JS</p>
         </a>
     </div>
-
+    
     <div class="card">
         <a href="Projects/sm64 web/sm64.html">
             <img src="Projects/sm64 web/logo.png" alt="Mario 64">
@@ -61,8 +61,6 @@
         </a>
     </div>
 </div>
-
-<script src="card.js" defer></script>
 
 <script>
 // ===== Particle Script =====
@@ -113,7 +111,16 @@ function animate(){
     requestAnimationFrame(animate);
 }
 animate();
+
+// Leave site confirmation only on games hub
+if (window.location.pathname.endsWith("documents.html")) {
+    window.addEventListener("beforeunload", function (e) {
+        e.preventDefault();
+        e.returnValue = "";
+    });
+}
 </script>
 
+<script src="card.js" defer></script>
 </body>
 </html>
