@@ -1,3 +1,4 @@
+// ===== STEAM-STYLE CARD TILT =====
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
@@ -7,12 +8,10 @@ document.querySelectorAll('.card').forEach(card => {
         const rotateY = ((x / rect.width) - 0.5) * 25; // stronger tilt
         const rotateX = ((y / rect.height) - 0.5) * -25;
 
-        card.style.setProperty('--rx', rotateX + 'deg');
-        card.style.setProperty('--ry', rotateY + 'deg');
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     });
 
     card.addEventListener('mouseleave', () => {
-        card.style.setProperty('--rx', '0deg');
-        card.style.setProperty('--ry', '0deg');
+        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
     });
 });
