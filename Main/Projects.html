@@ -113,7 +113,7 @@ function animate(){
 animate();
 
 // Leave site confirmation only on games hub
-if (window.location.pathname.endsWith("documents.html")) {
+if (window.location.pathname.endsWith("Projects.html")) {
     window.addEventListener("beforeunload", function (e) {
         e.preventDefault();
         e.returnValue = "";
