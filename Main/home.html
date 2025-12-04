@@ -24,6 +24,17 @@
   color: #fff;
 }
 </style>
+<style>
+/* Rainbow mode */
+.rainbow-mode {
+  animation: rainbow 2s linear infinite;
+}
+
+@keyframes rainbow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+</style>
 </head>
 <body>
 
@@ -137,7 +148,27 @@ function searchGames() {
         card.style.display = name.includes(input) ? 'block' : 'none';
     });
 }
-</script>
+// RAINBOW MODE WHEN TYPING "fun"
+function enableRainbow() {
+  document.body.classList.add('rainbow-mode');
+  localStorage.setItem('rainbowMode', 'true');
+}
 
+function disableRainbow() {
+  document.body.classList.remove('rainbow-mode');
+  localStorage.removeItem('rainbowMode');
+}
+
+// Listen for typing "fun"
+document.getElementById('searchBar').addEventListener('input', function() {
+  const val = this.value.toLowerCase();
+  if (val.includes('fun')) enableRainbow();
+});
+
+// Load saved rainbow mode on refresh
+if (localStorage.getItem('rainbowMode') === 'true') {
+  enableRainbow();
+}
+</script>
 </body>
 </html>
