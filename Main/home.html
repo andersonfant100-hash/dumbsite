@@ -34,10 +34,6 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 .card p { color:#1DB954; font-weight:bold; margin-top:auto; }
 .card img[title]:hover::after { content: attr(title); position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#000; color:#fff; padding:5px 8px; border-radius:6px; white-space:nowrap; z-index:50; }
 
-/* ===== Favorites ===== */
-.fav-btn { position:absolute; top:10px; right:10px; background:transparent; color:#1DB954; border:none; font-size:18px; cursor:pointer; }
-.fav-btn.active { color:gold; }
-
 /* ===== Scroll-to-Top ===== */
 #scrollTopBtn { position:fixed; bottom:20px; right:20px; padding:10px 15px; border:none; border-radius:50%; background:#1DB954; color:#fff; cursor:pointer; display:none; z-index:50; }
 
@@ -73,18 +69,18 @@ body.light-mode #scrollTopBtn { background:#1DB954; color:#fff; }
 <div class="grid-container" id="recentGrid"></div>
 
 <div class="grid-container" id="gameGrid">
-    <!-- Alphabetized Games with favorites -->
-    <div class="card" data-name="Basketball Random"><a href="Projects/basket-random/basket-random.html"><img src="Projects/basket-random/splash.jpeg" alt="Basketball Random" title="Basketball Random"><p>Basketball Random</p></a><button class="fav-btn" onclick="toggleFavorite('Basketball Random',this)">★</button></div>
-    <div class="card" data-name="Emulator JS"><a href="Projects/emulatorjs/emulatorjs.html"><img src="Projects/emulatorjs/docs/Logo.png" alt="Emulator JS" title="Emulator JS"><p>Emulator JS</p></a><button class="fav-btn" onclick="toggleFavorite('Emulator JS',this)">★</button></div>
-    <div class="card" data-name="Mario"><a href="Projects/mario/mario.html"><img src="Projects/mario/Theme/Mario.gif" alt="Mario" title="Mario"><p>Mario</p></a><button class="fav-btn" onclick="toggleFavorite('Mario',this)">★</button></div>
-    <div class="card" data-name="Mario 64"><a href="Projects/sm64 web/sm64.html"><img src="Projects/sm64 web/logo.png" alt="Mario 64" title="Mario 64"><p>Mario 64</p></a><button class="fav-btn" onclick="toggleFavorite('Mario 64',this)">★</button></div>
-    <div class="card" data-name="Minecraft 1.12.2"><a href="Projects/Eaglercraft-versions/Eaglercraft_1.12.2_WASM.html"><img src="Projects/Eaglercraft-versions/logo.png" alt="Minecraft 1.12.2" title="Minecraft 1.12.2"><p>Minecraft 1.12.2</p></a><button class="fav-btn" onclick="toggleFavorite('Minecraft 1.12.2',this)">★</button></div>
-    <div class="card" data-name="Minecraft 1.8.8"><a href="Projects/Eaglercraft-versions/EaglercraftX_1.8_WASM.html"><img src="Projects/Eaglercraft-versions/logo.png" alt="Minecraft 1.8.8" title="Minecraft 1.8.8"><p>Minecraft 1.8.8</p></a><button class="fav-btn" onclick="toggleFavorite('Minecraft 1.8.8',this)">★</button></div>
-    <div class="card" data-name="Papa's Burgeria"><a href="Projects/papasburgeria/burgeria.html"><img src="Projects/papasburgeria/ico.png" alt="Papa's Burgeria" title="Papa's Burgeria"><p>Papa's Burgeria</p></a><button class="fav-btn" onclick="toggleFavorite('Papa\'s Burgeria',this)">★</button></div>
-    <div class="card" data-name="Papa's Pizzaria"><a href="Projects/papaspizzaria/pizzaria.html"><img src="Projects/papaspizzaria/papaspizzaria.jpg" alt="Papa's Pizzaria" title="Papa's Pizzaria"><p>Papa's Pizzaria</p></a><button class="fav-btn" onclick="toggleFavorite('Papa\'s Pizzaria',this)">★</button></div>
-    <div class="card" data-name="Rooftop Snipers"><a href="Projects/rooftop-snipers/rooftop-snipers.html"><img src="Projects/rooftop-snipers/img/thumb.png" alt="Rooftop Snipers" title="Rooftop Snipers"><p>Rooftop Snipers</p></a><button class="fav-btn" onclick="toggleFavorite('Rooftop Snipers',this)">★</button></div>
-    <div class="card" data-name="Soccer Random"><a href="Projects/soccer-random/soccer-random.html"><img src="Projects/soccer-random/splash.png" alt="Soccer Random" title="Soccer Random"><p>Soccer Random</p></a><button class="fav-btn" onclick="toggleFavorite('Soccer Random',this)">★</button></div>
-    <div class="card" data-name="Volley Random"><a href="Projects/volley-random/volley-random.html"><img src="Projects/volley-random/splash.png" alt="Volley Random" title="Volley Random"><p>Volley Random</p></a><button class="fav-btn" onclick="toggleFavorite('Volley Random',this)">★</button></div>
+    <!-- Alphabetized Games -->
+    <div class="card" data-name="Basketball Random"><a href="Projects/basket-random/basket-random.html"><img src="Projects/basket-random/splash.jpeg" alt="Basketball Random" title="Basketball Random"><p>Basketball Random</p></a></div>
+    <div class="card" data-name="Emulator JS"><a href="Projects/emulatorjs/emulatorjs.html"><img src="Projects/emulatorjs/docs/Logo.png" alt="Emulator JS" title="Emulator JS"><p>Emulator JS</p></a></div>
+    <div class="card" data-name="Mario"><a href="Projects/mario/mario.html"><img src="Projects/mario/Theme/Mario.gif" alt="Mario" title="Mario"><p>Mario</p></a></div>
+    <div class="card" data-name="Mario 64"><a href="Projects/sm64 web/sm64.html"><img src="Projects/sm64 web/logo.png" alt="Mario 64" title="Mario 64"><p>Mario 64</p></a></div>
+    <div class="card" data-name="Minecraft 1.12.2"><a href="Projects/Eaglercraft-versions/Eaglercraft_1.12.2_WASM.html"><img src="Projects/Eaglercraft-versions/logo.png" alt="Minecraft 1.12.2" title="Minecraft 1.12.2"><p>Minecraft 1.12.2</p></a></div>
+    <div class="card" data-name="Minecraft 1.8.8"><a href="Projects/Eaglercraft-versions/EaglercraftX_1.8_WASM.html"><img src="Projects/Eaglercraft-versions/logo.png" alt="Minecraft 1.8.8" title="Minecraft 1.8.8"><p>Minecraft 1.8.8</p></a></div>
+    <div class="card" data-name="Papa's Burgeria"><a href="Projects/papasburgeria/burgeria.html"><img src="Projects/papasburgeria/ico.png" alt="Papa's Burgeria" title="Papa's Burgeria"><p>Papa's Burgeria</p></a></div>
+    <div class="card" data-name="Papa's Pizzaria"><a href="Projects/papaspizzaria/pizzaria.html"><img src="Projects/papaspizzaria/papaspizzaria.jpg" alt="Papa's Pizzaria" title="Papa's Pizzaria"><p>Papa's Pizzaria</p></a></div>
+    <div class="card" data-name="Rooftop Snipers"><a href="Projects/rooftop-snipers/rooftop-snipers.html"><img src="Projects/rooftop-snipers/img/thumb.png" alt="Rooftop Snipers" title="Rooftop Snipers"><p>Rooftop Snipers</p></a></div>
+    <div class="card" data-name="Soccer Random"><a href="Projects/soccer-random/soccer-random.html"><img src="Projects/soccer-random/splash.png" alt="Soccer Random" title="Soccer Random"><p>Soccer Random</p></a></div>
+    <div class="card" data-name="Volley Random"><a href="Projects/volley-random/volley-random.html"><img src="Projects/volley-random/splash.png" alt="Volley Random" title="Volley Random"><p>Volley Random</p></a></div>
 </div>
 
 <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
@@ -122,24 +118,15 @@ function showSuggestions(){
     suggestBox.style.display=matched.length?'block':'none';
 }
 
-// Favorites & Recently Played
-function toggleFavorite(name, btn){
-    let favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-    if(favs.includes(name)){ favs=favs.filter(f=>f!==name); btn.classList.remove('active'); }
-    else { favs.push(name); btn.classList.add('active'); }
-    localStorage.setItem('favorites', JSON.stringify(favs));
-    renderRecent();
-}
-
+// Recently Played
 function addRecent(name,img,link){
     let recents=JSON.parse(localStorage.getItem('recent')||'[]');
     recents=recents.filter(r=>r.name!==name);
     recents.unshift({name,img,link});
     if(recents.length>5) recents.pop();
-    localStorage.setItem('recent', JSON.stringify(recents));
+    localStorage.setItem('recent',JSON.stringify(recents));
     renderRecent();
 }
-
 function renderRecent(){
     const recentGrid=document.getElementById('recentGrid');
     recentGrid.innerHTML='';
@@ -149,25 +136,17 @@ function renderRecent(){
         const div=document.createElement('div');
         div.className='card';
         div.setAttribute('data-name', r.name);
-        const favs = JSON.parse(localStorage.getItem('favorites')||'[]');
-        const isFav = favs.includes(r.name);
-        div.innerHTML=`<a href="${r.link}"><img src="${r.img}" alt="${r.name}" title="${r.name}"><p>${r.name}</p></a>
-                       <button class="fav-btn ${isFav?'active':''}" onclick="toggleFavorite('${r.name}', this)">★</button>`;
+        div.innerHTML=`<a href="${r.link}"><img src="${r.img}" alt="${r.name}" title="${r.name}"><p>${r.name}</p></a>`;
         recentGrid.appendChild(div);
         div.querySelector('a').addEventListener('click',()=>addRecent(r.name,r.img,r.link));
     });
 }
 
-// Initialize favorites on main grid
-document.querySelectorAll('#gameGrid .card').forEach(card=>{
-    const btn=card.querySelector('.fav-btn');
-    const name=card.getAttribute('data-name');
-    const favs=JSON.parse(localStorage.getItem('favorites')||'[]');
-    if(favs.includes(name)) btn.classList.add('active');
-    card.querySelector('a').addEventListener('click',()=>addRecent(name,card.querySelector('img').src,card.querySelector('a').href));
+// Initialize recently played
+document.querySelectorAll('#gameGrid .card a').forEach(a=>{
+    const card=a.parentElement;
+    a.addEventListener('click',()=>addRecent(card.getAttribute('data-name'),card.querySelector('img').src,a.href));
 });
-
-// Render initial recently played
 renderRecent();
 
 // Konami Code
