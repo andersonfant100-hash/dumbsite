@@ -25,7 +25,7 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 .suggest-box div:hover { background:#222; }
 
 /* ===== Grid for Projects ===== */
-.grid-container { display:grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap:20px; padding:100px 40px 40px; max-width:1400px; margin:0 auto; z-index:1; position:relative; }
+.grid-container { display:grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap:20px; padding:20px 40px 40px; max-width:1400px; margin:0 auto; z-index:1; position:relative; }
 
 /* ===== Game Card ===== */
 .card { position:relative; width:100%; min-height:220px; background:#1f1f1f; padding:15px; border-radius:12px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 0 10px rgba(29,185,84,0.4); }
@@ -90,12 +90,18 @@ body.light-mode #scrollTopBtn { background:#1DB954; color:#fff; }
 <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
+// Dark/Light Mode
 const body=document.body;
 const themeToggle=document.getElementById('themeToggle');
 if(localStorage.getItem('theme')==='light'){body.classList.add('light-mode');themeToggle.textContent='🌞';}
-themeToggle.addEventListener('click',()=>{body.classList.toggle('light-mode');const isLight=body.classList.contains('light-mode');localStorage.setItem('theme',isLight?'light':'dark');themeToggle.textContent=isLight?'🌞':'🌙';});
+themeToggle.addEventListener('click',()=>{
+    body.classList.toggle('light-mode');
+    const isLight=body.classList.contains('light-mode');
+    localStorage.setItem('theme',isLight?'light':'dark');
+    themeToggle.textContent=isLight?'🌞':'🌙';
+});
 
-// Scroll to top
+// Scroll-to-top
 const scrollBtn=document.getElementById('scrollTopBtn');
 window.onscroll=()=>scrollBtn.style.display=(window.scrollY>300)?'block':'none';
 
@@ -116,28 +122,24 @@ function showSuggestions(){
     suggestBox.style.display=matched.length?'block':'none';
 }
 
-// Favorites
-function toggleFavorite(name,btn){
-    let favs=JSON.parse(localStorage.getItem('favorites')||'[]');
-    if(favs.includes(name)){favs=favs.filter(f=>f!==name);btn.classList.remove('active');} 
-    else {favs.push(name);btn.classList.add('active');}
-    localStorage.setItem('favorites',JSON.stringify(favs));
+// Favorites & Recently Played
+function toggleFavorite(name, btn){
+    let favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+    if(favs.includes(name)){ favs=favs.filter(f=>f!==name); btn.classList.remove('active'); }
+    else { favs.push(name); btn.classList.add('active'); }
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    renderRecent();
 }
-document.querySelectorAll('.fav-btn').forEach(btn=>{const name=btn.parentElement.getAttribute('data-name');const favs=JSON.parse(localStorage.getItem('favorites')||'[]');if(favs.includes(name))btn.classList.add('active');});
 
-// Konami Code
-const konami=[38,38,40,40,37,39,37,39,66,65];let konamiIndex=0;
-document.addEventListener('keydown',e=>{if(e.keyCode===konami[konamiIndex]){konamiIndex++;if(konamiIndex===konami.length){konamiIndex=0;alert('Secret Mode Activated!');body.classList.add('shake','glow');setTimeout(()=>body.classList.remove('shake','glow'),5000);}}else konamiIndex=0;});
-
-// Recently played
 function addRecent(name,img,link){
     let recents=JSON.parse(localStorage.getItem('recent')||'[]');
     recents=recents.filter(r=>r.name!==name);
     recents.unshift({name,img,link});
     if(recents.length>5) recents.pop();
-    localStorage.setItem('recent',JSON.stringify(recents));
+    localStorage.setItem('recent', JSON.stringify(recents));
     renderRecent();
 }
+
 function renderRecent(){
     const recentGrid=document.getElementById('recentGrid');
     recentGrid.innerHTML='';
@@ -146,13 +148,31 @@ function renderRecent(){
     recents.forEach(r=>{
         const div=document.createElement('div');
         div.className='card';
-        div.innerHTML=`<a href="${r.link}"><img src="${r.img}" alt="${r.name}" title="${r.name}"><p>${r.name}</p></a>`;
+        div.setAttribute('data-name', r.name);
+        const favs = JSON.parse(localStorage.getItem('favorites')||'[]');
+        const isFav = favs.includes(r.name);
+        div.innerHTML=`<a href="${r.link}"><img src="${r.img}" alt="${r.name}" title="${r.name}"><p>${r.name}</p></a>
+                       <button class="fav-btn ${isFav?'active':''}" onclick="toggleFavorite('${r.name}', this)">★</button>`;
         recentGrid.appendChild(div);
+        div.querySelector('a').addEventListener('click',()=>addRecent(r.name,r.img,r.link));
     });
 }
+
+// Initialize favorites on main grid
+document.querySelectorAll('#gameGrid .card').forEach(card=>{
+    const btn=card.querySelector('.fav-btn');
+    const name=card.getAttribute('data-name');
+    const favs=JSON.parse(localStorage.getItem('favorites')||'[]');
+    if(favs.includes(name)) btn.classList.add('active');
+    card.querySelector('a').addEventListener('click',()=>addRecent(name,card.querySelector('img').src,card.querySelector('a').href));
+});
+
+// Render initial recently played
 renderRecent();
 
-document.querySelectorAll('#gameGrid .card a').forEach(a=>a.addEventListener('click',()=>{const card=a.parentElement;addRecent(card.getAttribute('data-name'),card.querySelector('img').src,a.href);}));
+// Konami Code
+const konami=[38,38,40,40,37,39,37,39,66,65];let konamiIndex=0;
+document.addEventListener('keydown',e=>{if(e.keyCode===konami[konamiIndex]){konamiIndex++;if(konamiIndex===konami.length){konamiIndex=0;alert('Secret Mode Activated!');body.classList.add('shake','glow');setTimeout(()=>body.classList.remove('shake','glow'),5000);}}else konamiIndex=0;});
 </script>
 
 </body>
