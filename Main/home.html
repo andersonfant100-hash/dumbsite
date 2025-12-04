@@ -8,7 +8,7 @@
 <style>
 /* ===== General ===== */
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
-body, html { width:100%; height:100%; background:#121212; color:#fff; overflow-x:hidden; }
+body, html { width:100%; height:100%; background:#121212; color:#fff; overflow-x:hidden; transition: background 0.3s, color 0.3s; }
 canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
 
 /* ===== Nav Bar ===== */
@@ -16,10 +16,12 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 .nav-bar button { background:#1DB954; border:none; color:#fff; padding:10px 20px; border-radius:6px; cursor:pointer; transition:0.2s; }
 .nav-bar button:hover { background:#14a33f; }
 
-/* ===== Center Content ===== */
-.center-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; z-index:1; }
-.center-content h1 { font-size:4rem; color:#1DB954; margin-bottom:10px; }
-.center-content p { font-size:1.5rem; color:#ccc; }
+/* ===== Search Bar ===== */
+.search-container { text-align:center; margin-top:80px; position:relative; }
+.search-container input { width:60%; padding:12px; font-size:16px; border-radius:8px; border:none; outline:none; background:#000; color:#fff; }
+.suggest-box { width:60%; margin:0 auto; background:#000; color:#fff; border-radius:8px; display:none; position:absolute; left:50%; transform:translateX(-50%); z-index:20; }
+.suggest-box div { padding:10px; cursor:pointer; }
+.suggest-box div:hover { background:#222; }
 
 /* ===== Grid for Projects ===== */
 .grid-container { display:grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap:20px; padding:100px 40px 40px; max-width:1400px; margin:0 auto; z-index:1; position:relative; }
@@ -29,20 +31,22 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 .card:hover { box-shadow:0 0 20px rgba(29,185,84,0.85); transform: scale(1.05); }
 .card img { width:100%; height:120px; object-fit:cover; border-radius:8px; margin-bottom:10px; pointer-events:none; }
 .card p { color:#1DB954; font-weight:bold; margin-top:auto; }
+.card img[title]:hover::after { content: attr(title); position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#000; color:#fff; padding:5px 8px; border-radius:6px; white-space:nowrap; z-index:50; }
 
-/* ===== Search Bar ===== */
-.search-container { text-align:center; margin-top:80px; position:relative; }
-.search-container input { width:60%; padding:12px; font-size:16px; border-radius:8px; border:none; outline:none; background:#000; color:#fff; }
-.suggest-box { width:60%; margin:0 auto; background:#000; color:#fff; border-radius:8px; display:none; position:absolute; left:50%; transform:translateX(-50%); z-index:20; }
-.suggest-box div { padding:10px; cursor:pointer; }
-.suggest-box div:hover { background:#222; }
+/* ===== Scroll-to-Top ===== */
+#scrollTopBtn { position:fixed; bottom:20px; right:20px; padding:10px 15px; border:none; border-radius:50%; background:#1DB954; color:#fff; cursor:pointer; display:none; z-index:50; }
 
 /* ===== Rainbow Mode ===== */
 .rainbow-mode { animation: rainbow 2s linear infinite; }
 @keyframes rainbow { 0% { filter:hue-rotate(0deg); } 100% { filter:hue-rotate(360deg); } }
 
-/* ===== Scroll-to-Top ===== */
-#scrollTopBtn { position:fixed; bottom:20px; right:20px; padding:10px 15px; border:none; border-radius:50%; background:#1DB954; color:#fff; cursor:pointer; display:none; z-index:50; }
+/* ===== Light Mode ===== */
+body.light-mode { background:#f5f5f5; color:#000; }
+body.light-mode .nav-bar { background:#e0e0e0; }
+body.light-mode .card { background:#fff; box-shadow:0 0 10px rgba(0,0,0,0.2); }
+body.light-mode .card p { color:#1DB954; }
+body.light-mode .search-container input { background:#000; color:#fff; }
+body.light-mode #scrollTopBtn { background:#1DB954; color:#fff; }
 </style>
 </head>
 <body>
@@ -51,6 +55,7 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 
 <div class="nav-bar">
     <button onclick="location.href='index.html'">Home</button>
+    <button id="themeToggle">🌙</button>
     <button onclick="location.href='settings.html'">Settings</button>
 </div>
 
@@ -60,68 +65,66 @@ canvas#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-ind
 </div>
 
 <div class="grid-container" id="gameGrid">
-    <!-- Alphabetized game cards -->
-    <div class="card" data-name="Basketball Random">
-        <a href="Projects/basket-random/basket-random.html"><img src="Projects/basket-random/splash.jpeg" alt="Basketball Random"><p>Basketball Random</p></a>
-    </div>
-    <div class="card" data-name="Emulator JS">
-        <a href="Projects/emulatorjs/emulatorjs.html"><img src="Projects/emulatorjs/docs/Logo.png" alt="Emulator JS"><p>Emulator JS</p></a>
-    </div>
-    <div class="card" data-name="Mario">
-        <a href="Projects/mario/mario.html"><img src="Projects/mario/Theme/Mario.gif" alt="Mario"><p>Mario</p></a>
-    </div>
-    <div class="card" data-name="Mario 64">
-        <a href="Projects/sm64 web/sm64.html"><img src="Projects/sm64 web/logo.png" alt="Mario 64"><p>Mario 64</p></a>
-    </div>
-    <div class="card" data-name="Minecraft 1.12.2">
-        <a href="Projects/Eaglercraft-versions/Eaglercraft_1.12.2_WASM.html"><img src="Projects/Eaglercraft-versions/logo.png" alt="Minecraft 1.12.2"><p>Minecraft 1.12.2</p></a>
-    </div>
-    <div class="card" data-name="Minecraft 1.8.8">
-        <a href="Projects/Eaglercraft-versions/EaglercraftX_1.8_WASM.html"><img src="Projects/Eaglercraft-versions/logo.png" alt="Minecraft 1.8.8"><p>Minecraft 1.8.8</p></a>
-    </div>
-    <div class="card" data-name="Papa's Burgeria">
-        <a href="Projects/papasburgeria/burgeria.html"><img src="Projects/papasburgeria/ico.png" alt="Papa's Burgeria"><p>Papa's Burgeria</p></a>
-    </div>
-    <div class="card" data-name="Papa's Pizzaria">
-        <a href="Projects/papaspizzaria/pizzaria.html"><img src="Projects/papaspizzaria/papaspizzaria.jpg" alt="Papa's Pizzaria"><p>Papa's Pizzaria</p></a>
-    </div>
-    <div class="card" data-name="Rooftop Snipers">
-        <a href="Projects/rooftop-snipers/rooftop-snipers.html"><img src="Projects/rooftop-snipers/img/thumb.png" alt="Rooftop Snipers"><p>Rooftop Snipers</p></a>
-    </div>
-    <div class="card" data-name="Soccer Random">
-        <a href="Projects/soccer-random/soccer-random.html"><img src="Projects/soccer-random/splash.png" alt="Soccer Random"><p>Soccer Random</p></a>
-    </div>
-    <div class="card" data-name="Volley Random">
-        <a href="Projects/volley-random/volley-random.html"><img src="Projects/volley-random/splash.png" alt="Volley Random"><p>Volley Random</p></a>
-    </div>
+    <!-- Games Alphabetized -->
+    <div class="card" data-name="Basketball Random"><a href="Projects/basket-random/basket-random.html"><img src="Projects/basket-random/splash.jpeg" alt="Basketball Random" title="Basketball Random"><p>Basketball Random</p></a></div>
+    <div class="card" data-name="Emulator JS"><a href="Projects/emulatorjs/emulatorjs.html"><img src="Projects/emulatorjs/docs/Logo.png" alt="Emulator JS" title="Emulator JS"><p>Emulator JS</p></a></div>
+    <div class="card" data-name="Mario"><a href="Projects/mario/mario.html"><img src="Projects/mario/Theme/Mario.gif" alt="Mario" title="Mario"><p>Mario</p></a></div>
+    <div class="card" data-name="Mario 64"><a href="Projects/sm64 web/sm64.html"><img src="Projects/sm64 web/logo.png" alt="Mario 64" title="Mario 64"><p>Mario 64</p></a></div>
+    <div class="card" data-name="Minecraft 1.12.2"><a href="Projects/Eaglercraft-versions/Eaglercraft_1.12.2_WASM.html"><img src="Projects/Eaglercraft-versions/logo.png" alt="Minecraft 1.12.2" title="Minecraft 1.12.2"><p>Minecraft 1.12.2</p></a></div>
+    <div class="card" data-name="Minecraft 1.8.8"><a href="Projects/Eaglercraft-versions/EaglercraftX_1.8_WASM.html"><img src="Projects/Eaglercraft-versions/logo.png" alt="Minecraft 1.8.8" title="Minecraft 1.8.8"><p>Minecraft 1.8.8</p></a></div>
+    <div class="card" data-name="Papa's Burgeria"><a href="Projects/papasburgeria/burgeria.html"><img src="Projects/papasburgeria/ico.png" alt="Papa's Burgeria" title="Papa's Burgeria"><p>Papa's Burgeria</p></a></div>
+    <div class="card" data-name="Papa's Pizzaria"><a href="Projects/papaspizzaria/pizzaria.html"><img src="Projects/papaspizzaria/papaspizzaria.jpg" alt="Papa's Pizzaria" title="Papa's Pizzaria"><p>Papa's Pizzaria</p></a></div>
+    <div class="card" data-name="Rooftop Snipers"><a href="Projects/rooftop-snipers/rooftop-snipers.html"><img src="Projects/rooftop-snipers/img/thumb.png" alt="Rooftop Snipers" title="Rooftop Snipers"><p>Rooftop Snipers</p></a></div>
+    <div class="card" data-name="Soccer Random"><a href="Projects/soccer-random/soccer-random.html"><img src="Projects/soccer-random/splash.png" alt="Soccer Random" title="Soccer Random"><p>Soccer Random</p></a></div>
+    <div class="card" data-name="Volley Random"><a href="Projects/volley-random/volley-random.html"><img src="Projects/volley-random/splash.png" alt="Volley Random" title="Volley Random"><p>Volley Random</p></a></div>
 </div>
 
 <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-// ===== Search & Temporary Rainbow =====
+// ===== Dark/Light Mode =====
+const body = document.body;
+const themeToggle = document.getElementById('themeToggle');
+if(localStorage.getItem('theme') === 'light') {
+    body.classList.add('light-mode'); themeToggle.textContent = '🌞';
+}
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('light-mode');
+    const isLight = body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    themeToggle.textContent = isLight ? '🌞' : '🌙';
+});
+
+// ===== Scroll-to-Top =====
+const scrollBtn = document.getElementById('scrollTopBtn');
+window.onscroll = () => scrollBtn.style.display = (window.scrollY>300)?'block':'none';
+
+// ===== Search & Rainbow =====
 const searchBar = document.getElementById('searchBar');
 const suggestBox = document.getElementById('suggestBox');
-function searchGames() {
+function searchGames(){
     const input = searchBar.value.toLowerCase();
     const cards = document.querySelectorAll('#gameGrid .card');
     cards.forEach(c => c.style.display = c.getAttribute('data-name').toLowerCase().includes(input) ? 'block' : 'none');
-    if (input.includes('fun')) document.body.classList.add('rainbow-mode');
-    else document.body.classList.remove('rainbow-mode');
+    if(input.includes('fun')) body.classList.add('rainbow-mode'); else body.classList.remove('rainbow-mode');
 }
-
-function showSuggestions() {
+function showSuggestions(){
     const val = searchBar.value.toLowerCase();
     if(!val){ suggestBox.style.display='none'; return; }
     const allGames = [...document.querySelectorAll('.card')].map(c => c.getAttribute('data-name'));
     const matched = allGames.filter(g => g.toLowerCase().includes(val));
     suggestBox.innerHTML = matched.map(m => `<div onclick="searchBar.value='${m}';searchGames();suggestBox.style.display='none'">${m}</div>`).join('');
-    suggestBox.style.display = 'block';
+    suggestBox.style.display = matched.length? 'block':'none';
 }
 
-// ===== Scroll-to-Top =====
-const scrollBtn = document.getElementById('scrollTopBtn');
-window.onscroll = () => scrollBtn.style.display = (window.scrollY>300)?'block':'none';
+// ===== Easter Eggs Example =====
+searchBar.addEventListener('input',()=>{
+    const v = searchBar.value.toLowerCase();
+    body.classList.toggle('shake', v.includes('shake'));
+    body.classList.toggle('warp', v.includes('warp'));
+    body.classList.toggle('glow', v.includes('glow'));
+    body.classList.toggle('retro', v.includes('retro'));
+});
 </script>
 
 </body>
